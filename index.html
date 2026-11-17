@@ -369,7 +369,7 @@
   .gscene .p-left { background: var(--cab1, #8fd0ff); }
   .gscene .p-right { background: var(--cab1, #6db9fa); }
   .gscene .p-top { background: var(--cab2, #a8dcff); }
-  .gscene .p-glass { border-color: var(--cab1, #79c1ff); pointer-events: auto; cursor: pointer; touch-action: pan-y; }
+  .gscene .p-glass { border-color: var(--cab1, #79c1ff); pointer-events: none; }
   .gscene .p-base { background: var(--based, #fff); }
   .gscene .p-base-top { background: var(--based2, #ffe9f2); }
   .gscene .claw3d { margin-left: 42%; animation: none; }
@@ -734,7 +734,7 @@
     animation: coinspin 3.4s linear infinite;
     transform-style: preserve-3d;
   }
-  @keyframes coinfloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
+  @keyframes coinfloat { 0%,100% { transform: translateZ(40px); } 50% { transform: translateZ(40px) translateY(-16px); } }
   @keyframes coinspin { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(360deg); } }
   .coin-wrap:hover .coin-float { box-shadow: 0 12px 30px rgba(35,35,79,.4), inset 0 -7px 0 rgba(35,35,79,.16); }
   .coin-tip {
