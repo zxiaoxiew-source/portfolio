@@ -73,6 +73,39 @@
   .board-s4 .bg-word { color: rgba(255,255,255,.18); }
   .board-s5 { background: #e3f4ea; }
   .board-s5 .bg-word { color: rgba(125,201,154,.32); }
+  .board-s6 { background: linear-gradient(180deg, #f3e3b8, #d3ad5e); }
+  .board-s6 .bg-word { color: rgba(138,90,31,.15); }
+  .board-s6 .hint { background: rgba(255,255,255,.9); color: #7a531f !important; }
+  .board-s6 .detail-card { margin-top: 0; }
+
+  /* 神话概念图 · 横竖卷轴分展 */
+  .myth-scrolls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 6px 0 22px; }
+  .myth-scrolls figure, .myth-wide figure {
+    margin: 0; background: #fffaf0; padding: 10px 10px 12px;
+    border-radius: 10px; box-shadow: 0 8px 18px -8px rgba(90,60,20,.45);
+    transition: transform .25s ease;
+  }
+  .myth-scrolls figure:nth-child(odd)  { transform: rotate(-1.4deg); }
+  .myth-scrolls figure:nth-child(even) { transform: rotate(1.2deg); }
+  .myth-scrolls figure:hover { transform: rotate(0) scale(1.03); position: relative; z-index: 2; }
+  .myth-wide figure:hover { transform: translateY(-4px) scale(1.015); }
+  .myth-scrolls img, .myth-wide img { width: 100%; display: block; border-radius: 6px; }
+  .myth-scrolls figcaption, .myth-wide figcaption {
+    margin-top: 9px; font-weight: 700; font-size: 13px; color: #6b4a1c; text-align: center;
+  }
+  .myth-wide { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 6px 0 26px; }
+  .seal-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 4px 0 18px; }
+  .seal {
+    background: #b03a2e; color: #fff; font-weight: 900; font-size: 12.5px;
+    padding: 7px 14px; border-radius: 8px; letter-spacing: .14em;
+    box-shadow: 0 4px 0 rgba(90,30,20,.3); transform: rotate(-1deg);
+  }
+  .seal:nth-child(even) { transform: rotate(1.2deg); }
+  .myth-head { text-align: center; font-weight: 900; letter-spacing: .3em; color: #8a5a1f; font-size: 15px; margin: 20px 0 4px; }
+  @media (max-width: 760px) {
+    .myth-scrolls { grid-template-columns: repeat(2, 1fr); }
+    .myth-wide { grid-template-columns: 1fr; }
+  }
 
   .board-title { text-align: center; margin: 0 0 34px; position: relative; z-index: 2; }
   .board-title .en {
@@ -750,6 +783,23 @@
       <path d="M52 92 Q60 100 68 92" stroke="#23234f" stroke-width="4.5" fill="none" stroke-linecap="round"/>
     </symbol>
 
+    <!-- 卡其色小熊 -->
+    <symbol id="doll-bear" viewBox="0 0 120 130">
+      <circle cx="30" cy="26" r="13" fill="#c8a76a"/>
+      <circle cx="30" cy="26" r="6" fill="#efe0be"/>
+      <circle cx="90" cy="26" r="13" fill="#c8a76a"/>
+      <circle cx="90" cy="26" r="6" fill="#efe0be"/>
+      <ellipse cx="60" cy="88" rx="44" ry="40" fill="#c8a76a"/>
+      <ellipse cx="60" cy="102" rx="25" ry="18" fill="#efe0be"/>
+      <ellipse cx="16" cy="96" rx="11" ry="9" fill="#c8a76a"/>
+      <ellipse cx="104" cy="96" rx="11" ry="9" fill="#c8a76a"/>
+      <rect x="45" y="66" width="9" height="19" rx="4.5" fill="#4a3413"/>
+      <rect x="66" y="66" width="9" height="19" rx="4.5" fill="#4a3413"/>
+      <circle cx="35" cy="84" r="6" fill="#ffb0a0" opacity=".8"/>
+      <circle cx="85" cy="84" r="6" fill="#ffb0a0" opacity=".8"/>
+      <path d="M52 92 Q60 100 68 92" stroke="#4a3413" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+    </symbol>
+
     <!-- 米白色小白鹅 -->
     <symbol id="doll-goose" viewBox="0 0 120 130">
       <ellipse cx="60" cy="80" rx="45" ry="42" fill="#f6efdd"/>
@@ -782,6 +832,7 @@
     <a href="#fridge">作品① 🐳</a>
     <a href="#mat">作品② ⭐</a>
     <a href="#guojia">作品③ 🪿</a>
+    <a href="#myth">神话 🐻</a>
     <a href="#thanks">Thanks 🐰</a>
   </nav>
 </header>
@@ -1146,7 +1197,88 @@
   </div>
 </section>
 
-<!-- ═══════ 板块 4 · 娃娃机抓兔子 → 感谢观看 ═══════ -->
+<!-- ═══════ 作品④ · 卡其小熊 → 中华神话 AI 概念图 ═══════ -->
+<section class="board board-s6" id="myth" data-game>
+  <div class="bg-word">神话<br>创世</div>
+  <div class="wrap">
+    <div class="board-title">
+      <p class="en" style="color:#8a5a1f">AI × <span style="color:#b03a2e">华夏神话</span> 🐻</p>
+      <p class="zh" style="color:rgba(90,60,20,.78)">抓一只小熊，翻开 AI 笔下的东方创世纪</p>
+    </div>
+
+    <div class="stage gstage" style="--cabback:#e7cf96; --cab1:#c9a86a; --cab2:#e7cf96; --based:#fff8e8; --based2:#f3e3b8;">
+      <div class="scene gscene">
+        <div class="panel p-ground"></div>
+        <div class="panel p-back cabback">
+          <div class="rail3"></div>
+        </div>
+        <div class="front3">
+          <div class="rail3"></div>
+          <div class="claw3d">
+            <div class="cable3"></div>
+            <svg class="claw-svg" width="84" height="66" viewBox="0 0 70 56">
+              <rect x="16" y="0" width="38" height="15" rx="7.5" fill="#2a3272"/>
+              <path class="claw-arm left" d="M25 14 Q14 30 26 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+              <path class="claw-arm right" d="M45 14 Q56 30 44 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+            </svg>
+            <div class="caught-slot" tabindex="0" role="button" aria-label="查看神话作品">
+              <svg viewBox="0 0 120 130"><use class="caught-use" href="#doll-bear"/></svg>
+            </div>
+          </div>
+          <div class="g-doll" data-sym="#doll-bear" style="left:35.8%; animation-delay:.9s;"><svg viewBox="0 0 120 130"><use href="#doll-bear"/></svg></div>
+          <div class="gpuff" style="left:4%;"></div>
+          <div class="gpuff" style="left:30%; background:#f7ecd2;"></div>
+          <div class="gpuff" style="left:58%;"></div>
+          <div class="gpuff" style="left:80%; background:#fff3d9;"></div>
+        </div>
+        <div class="panel p-top"></div>
+        <div class="panel p-left"></div>
+        <div class="panel p-right"></div>
+        <div class="panel p-glass ghit"></div>
+        <div class="panel p-base-top"></div>
+        <div class="panel p-base">
+          <div class="b-joystick"><span class="stick"></span><span class="ball"></span></div>
+          <button class="b-start gdrop" aria-label="下爪抓娃娃"></button>
+          <div class="b-coin-label">COIN</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="hint" style="color:#7a531f">🖱️ 移动瞄准 · 点击小熊 🐻 展开神话画卷</p>
+
+    <div class="detail">
+      <div class="detail-inner">
+        <div class="detail-card">
+          <h3>《山海拾遗》 · AI 中华神话概念图集</h3>
+          <p>以 AI 为笔，以《山海经》与上古传说为墨——盘古的斧光、女娲的彩石、精卫的振翅、夸父的脚印、嫦娥的衣带，都被重新晕染成一张张概念海报。竖轴如挂画，横卷如长河，一次展开两卷。</p>
+
+          <p class="myth-head">— 横 卷 · 山 河 长 景 —</p>
+          <div class="seal-row"><span class="seal">开天辟地</span><span class="seal">炼石补天</span><span class="seal">广寒仙宫</span></div>
+          <div class="myth-wide">
+            <figure><img src="__IMG_KT__" alt="开天辟地横卷" /><figcaption>《开天辟地》清浊两分，一柱光落，山河自此有了名字</figcaption></figure>
+            <figure><img src="__IMG_BT__" alt="炼石补天横卷" /><figcaption>《炼石补天》五彩石光垂成天幕，天倾之处复归圆满</figcaption></figure>
+            <figure><img src="__IMG_GH1__" alt="广寒宫夜横卷" /><figcaption>《广寒宫 · 夜》月相成环、环成阶，一步一个盈亏</figcaption></figure>
+            <figure><img src="__IMG_GH2__" alt="广寒宫昼横卷" /><figcaption>《广寒宫 · 昼》云海翻银、仙阙浮金，月光在此囤积</figcaption></figure>
+          </div>
+
+          <p class="myth-head">— 立 轴 · 英 雄 本 相 —</p>
+          <div class="seal-row"><span class="seal">创世之神</span><span class="seal">炼石苍穹</span><span class="seal">逐日而行</span><span class="seal">碧海孤鸣</span><span class="seal">广寒仙踪</span></div>
+          <div class="myth-scrolls">
+            <figure><img src="__IMG_PG__" alt="盘古开天立轴" /><figcaption>《盘古开天》执斧破鸿蒙，血肉化山河</figcaption></figure>
+            <figure><img src="__IMG_NV__" alt="女娲补天立轴" /><figcaption>《女娲补天》以一身玄躯，补万里苍天</figcaption></figure>
+            <figure><img src="__IMG_KF__" alt="夸父逐日立轴" /><figcaption>《夸父逐日》凭一腔孤勇，追万古朝阳</figcaption></figure>
+            <figure><img src="__IMG_JW__" alt="精卫填海立轴" /><figcaption>《精卫填海》以微末之躯，誓平万顷沧波</figcaption></figure>
+            <figure><img src="__IMG_CE__" alt="嫦娥奔月立轴" /><figcaption>《嫦娥奔月》万古清辉，独赴广寒</figcaption></figure>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions"><button class="play-again">↻ 把小熊放回去，再抓一次</button></div>
+  </div>
+</section>
+
+<!-- ═══════ 板块 5 · 娃娃机抓兔子 → 感谢观看 ═══════ -->
 <section class="board board-s4" id="thanks" data-game>
   <div class="bg-word">THANKS<br>BYE</div>
   <div class="wrap">
