@@ -370,6 +370,8 @@
   .gscene .p-right { background: var(--cab1, #6db9fa); }
   .gscene .p-top { background: var(--cab2, #a8dcff); }
   .gscene .p-glass { border-color: var(--cab1, #79c1ff); pointer-events: none; }
+  /* 装饰面板一律不拦截点击，娃娃区域必须可点 */
+  .p-ground, .p-back, .p-top, .p-left, .p-right, .p-base-top, .p-glass { pointer-events: none; }
   .gscene .p-base { background: var(--based, #fff); }
   .gscene .p-base-top { background: var(--based2, #ffe9f2); }
   .gscene .claw3d { margin-left: 42%; animation: none; }
@@ -1565,6 +1567,14 @@
     }
 
     doll.addEventListener('click', grab);
+    // 兜底：3D 变换下部分面板可能拦截命中，按屏幕坐标判断是否点到娃娃
+    sec.querySelector('.gstage').addEventListener('click', (e) => {
+      if (state !== 'idle') return;
+      if (e.target.closest('button, a, .caught-slot')) return;
+      const r = doll.getBoundingClientRect();
+      if (e.clientX >= r.left - 12 && e.clientX <= r.right + 12 &&
+          e.clientY >= r.top - 12 && e.clientY <= r.bottom + 12) grab();
+    });
     doll.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); grab(); }
     });
