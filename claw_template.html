@@ -275,6 +275,38 @@
   .board.ready .doll-slot:hover svg { animation-play-state: paused; transform: scale(1.06); transition: transform .25s ease; }
 
   .actions { text-align: center; margin-top: 26px; position: relative; z-index: 2; }
+  /* 图片灯箱：点击放大查看 */
+  .gallery img, .myth-scrolls img, .myth-wide img, .coral-scrolls img, .g-poster img { cursor: zoom-in; }
+  .lightbox {
+    position: fixed; inset: 0; z-index: 999;
+    background: rgba(18,18,46,.88);
+    display: grid; place-items: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity .25s ease;
+  }
+  .lightbox.open { opacity: 1; pointer-events: auto; }
+  .lightbox img {
+    max-width: 92vw; max-height: 88vh;
+    border-radius: 14px; box-shadow: 0 30px 80px -20px rgba(0,0,0,.6);
+    background: #fff; padding: 8px;
+    transform: scale(.92); transition: transform .25s ease;
+  }
+  .lightbox.open img { transform: scale(1); }
+  .lightbox .lb-close {
+    position: absolute; top: 20px; right: 26px;
+    width: 46px; height: 46px; border-radius: 50%;
+    background: #fff; color: #23234f; border: none;
+    font-size: 22px; font-weight: 900; cursor: pointer;
+    box-shadow: 0 6px 0 rgba(0,0,0,.25);
+    transition: transform .2s ease;
+  }
+  .lightbox .lb-close:hover { transform: scale(1.1) rotate(90deg); }
+  .lightbox .lb-tip {
+    position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+    color: rgba(255,255,255,.75); font-size: 13px; font-weight: 700;
+    background: rgba(0,0,0,.35); padding: 8px 18px; border-radius: 100px;
+  }
+
   .play-again {
     border: none; border-radius: 100px;
     background: var(--navy); color: #fff;
@@ -1075,7 +1107,7 @@
       </div>
     </div>
 
-    <div class="actions"><button class="play-again">↻ 把鲸鱼放回去，再抓一次</button></div>
+    <div class="actions"><button class="play-again">↻ 把狐狸放回去，再抓一次</button></div>
   </div>
 </section>
 
@@ -1596,6 +1628,25 @@
       }, 1600);
     });
   }
+
+  // ===== 图片灯箱：点击任意作品图放大查看 =====
+  const lb = document.createElement('div');
+  lb.className = 'lightbox';
+  lb.innerHTML = '<button class="lb-close" aria-label="关闭放大视图">✕</button><img alt="作品大图" /><span class="lb-tip">点击空白处或 ✕ 关闭 · ESC 也行</span>';
+  document.body.appendChild(lb);
+  const lbImg = lb.querySelector('img');
+  function closeLb() { lb.classList.remove('open'); document.body.style.overflow = ''; }
+  lb.addEventListener('click', (e) => { if (e.target === lb || e.target.classList.contains('lb-close')) closeLb(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLb(); });
+  document.querySelectorAll('.gallery img, .myth-scrolls img, .myth-wide img, .coral-scrolls img, .g-poster img').forEach((img) => {
+    img.addEventListener('click', (e) => {
+      e.stopPropagation();
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
 </script>
 
 </body>
