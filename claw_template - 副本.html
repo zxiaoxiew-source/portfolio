@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Claw Machine Portfolio 🎮</title>
+<style>
+  :root {
+    --navy: #23234f;
+    --navy2: #2a3272;
+    --pink: #ffb6d9;
+    --pink-deep: #ff8ec4;
+    --green: #b9e94c;
+    --blue: #5ba8f5;
+    --yellow: #ffc93c;
+    --purple: #c9a6f2;
+    --purple-deep: #9b6fe8;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 70px; }
+
+  body {
+    margin: 0;
+    font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
+    color: var(--navy);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  img { max-width: 100%; display: block; }
+  button { font-family: inherit; cursor: pointer; }
+
+  /* ---------- 导航 ---------- */
+  .topnav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 28px;
+    background: rgba(255,255,255,.12);
+    backdrop-filter: blur(12px);
+  }
+  .topnav .logo { font-weight: 800; font-size: 16px; color: #fff; text-shadow: 0 1px 4px rgba(35,35,79,.3); display: flex; align-items: center; gap: 8px; }
+  .topnav nav { display: flex; gap: 6px; flex-wrap: wrap; }
+  .topnav nav a {
+    color: #fff; font-size: 13.5px; font-weight: 600;
+    padding: 7px 14px; border-radius: 100px;
+    text-shadow: 0 1px 3px rgba(35,35,79,.35);
+    transition: background .25s ease;
+  }
+  .topnav nav a:hover { background: rgba(255,255,255,.28); }
+
+  /* ---------- 板块通用 ---------- */
+  .board { position: relative; min-height: 100vh; padding: 110px 0 90px; overflow: hidden; }
+  .wrap { width: min(980px, 92vw); margin: 0 auto; position: relative; z-index: 2; }
+
+  .bg-word {
+    position: absolute; inset: 0; z-index: 0;
+    display: flex; flex-direction: column; justify-content: center;
+    font-size: clamp(90px, 16vw, 200px);
+    font-weight: 900; letter-spacing: -.02em; line-height: .92;
+    color: rgba(255,255,255,.35);
+    user-select: none; pointer-events: none;
+    padding-left: 4vw; white-space: nowrap;
+  }
+
+  .board-s1 { background: #ffd335; }
+  .board-s2 { background: #fff1d6; }
+  .board-s2 .bg-word { color: rgba(91,168,245,.22); }
+  .board-s3 { background: #ffe1ec; }
+  .board-s3 .bg-word { color: rgba(255,201,60,.35); }
+  .board-s4 { background: linear-gradient(180deg, #c9a6f2, #9b6fe8); }
+  .board-s4 .bg-word { color: rgba(255,255,255,.18); }
+  .board-s5 { background: #e3f4ea; }
+  .board-s5 .bg-word { color: rgba(125,201,154,.32); }
+
+  .board-title { text-align: center; margin: 0 0 34px; position: relative; z-index: 2; }
+  .board-title .en {
+    font-size: clamp(38px, 7vw, 72px); font-weight: 900; letter-spacing: -.02em;
+    line-height: 1.02; margin: 0;
+  }
+  .board-title .zh { font-size: 15px; opacity: .75; font-weight: 600; margin-top: 8px; }
+
+  /* ---------- 娃娃机 ---------- */
+  .machine {
+    width: min(560px, 94vw);
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 26px 40px rgba(35,35,79,.28));
+  }
+
+  .m-pole {
+    position: absolute; top: -34px; left: 50%; transform: translateX(-50%);
+    width: 10px; height: 40px; background: var(--navy2); border-radius: 6px;
+  }
+
+  .glass {
+    position: relative;
+    aspect-ratio: 10 / 9;
+    border-radius: 26px 26px 6px 6px;
+    border: 14px solid var(--machine-accent, var(--pink));
+    border-bottom: none;
+    overflow: hidden;
+    background: var(--machine-glass, #ffd9ea);
+  }
+  .glass-dots {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,.55) 6px, transparent 7px);
+    background-size: 64px 56px;
+  }
+  .glass-shine {
+    position: absolute; top: -20%; left: -12%;
+    width: 45%; height: 150%;
+    background: linear-gradient(100deg, rgba(255,255,255,.4), rgba(255,255,255,0) 70%);
+    transform: rotate(8deg);
+  }
+
+  /* 底座 */
+  .m-base {
+    position: relative;
+    height: 118px;
+    background: var(--machine-base, #ffe3f0);
+    border-radius: 6px 6px 30px 30px;
+    border-top: 8px solid #fff;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 34px;
+    box-shadow: inset 0 -10px 0 rgba(35,35,79,.06);
+  }
+  .joystick { position: relative; width: 54px; height: 64px; }
+  .joystick .stick {
+    position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+    width: 9px; height: 40px; background: var(--navy2); border-radius: 5px;
+    transform-origin: bottom center; transform: translateX(-50%) rotate(-8deg);
+  }
+  .joystick .ball {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--pink-deep);
+    box-shadow: inset -4px -5px 0 rgba(35,35,79,.18);
+    transform: translateX(-46%) rotate(0deg);
+  }
+  .big-btn {
+    width: 84px; height: 40px; border-radius: 100px;
+    background: var(--pink-deep); color: #fff;
+    font-weight: 900; letter-spacing: .18em; font-size: 12px;
+    display: grid; place-items: center;
+    box-shadow: 0 6px 0 rgba(35,35,79,.25), inset 0 -6px 0 rgba(35,35,79,.15);
+    border: none;
+  }
+  .coin {
+    background: #fff; border-radius: 12px; padding: 10px 14px;
+    font-weight: 900; font-size: 11px; letter-spacing: .18em;
+    box-shadow: 0 4px 0 rgba(35,35,79,.12);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .coin::before { content: "▮"; font-size: 14px; }
+
+  /* 爪子吊臂 */
+  .rig {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center;
+    z-index: 5;
+    transition: transform 1.3s cubic-bezier(.5,0,.3,1);
+  }
+  .cable {
+    width: 5px; background: var(--navy2); border-radius: 4px;
+    height: 26px;
+    transition: height 1.3s cubic-bezier(.5,0,.3,1);
+  }
+  .claw-svg { display: block; margin: -2px auto 0; transition: transform 1.3s cubic-bezier(.5,0,.3,1); }
+  .claw-arm { transform-origin: center top; transition: transform .6s ease; }
+
+  /* 挂在爪子下的娃娃 */
+  .doll-slot {
+    margin-top: -6px;
+    width: 120px; opacity: 0; transform: scale(.4);
+    transition: opacity .5s ease .1s, transform .5s cubic-bezier(.3,1.4,.5,1) .1s;
+  }
+  .doll-slot svg { width: 100%; display: block; filter: drop-shadow(0 8px 10px rgba(35,35,79,.22)); }
+  .rig.hold .doll-slot { opacity: 1; transform: scale(1); }
+  .board.ready .doll-slot svg { animation: dollswing 3s ease-in-out infinite; transform-origin: top center; }
+  @keyframes dollswing { 0%,100% { transform: rotate(-4deg); } 50% { transform: rotate(5deg); } }
+
+  /* 阶段动画 */
+  .board.phase1 .cable { height: 58%; }
+  .board.phase1 .claw-arm.left  { transform: rotate(-16deg); }
+  .board.phase1 .claw-arm.right { transform: rotate(16deg); }
+  .board.phase1 .rig { transform: translateX(-50%) translateY(46%); }
+  .board.phase2 .cable { height: 34%; }
+  .board.phase2 .rig { transform: translateX(-50%) translateY(12%); }
+  .board.phase2 .claw-arm.left  { transform: rotate(-16deg); }
+  .board.phase2 .claw-arm.right { transform: rotate(16deg); }
+
+  /* 底部娃娃堆 */
+  .pile {
+    position: absolute; left: 0; right: 0; bottom: -6px; height: 120px;
+    display: flex; align-items: flex-end; justify-content: center; gap: -10px;
+    z-index: 3;
+  }
+  .puff {
+    width: 74px; height: 58px; border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 -6px 0 rgba(255,255,255,.75), 0 10px 14px rgba(35,35,79,.12);
+    flex: none; margin: 0 -10px;
+  }
+  .puff:nth-child(2n) { background: #ffeef5; }
+  .puff:nth-child(3n) { transform: translateY(-8px); }
+
+  /* 提示 & 按钮 */
+  .hint {
+    text-align: center; font-weight: 700; font-size: 14.5px;
+    margin: 26px auto 0; position: relative; z-index: 2;
+    width: fit-content;
+    background: rgba(255,255,255,.82);
+    padding: 10px 26px; border-radius: 100px;
+    box-shadow: 0 5px 0 rgba(35,35,79,.12);
+    opacity: 1; transition: opacity .4s ease;
+  }
+  .board-s4 .hint { background: rgba(255,255,255,.92); color: #4a2d7a !important; }
+  .board.ready .hint { opacity: 1; animation: hintblink 1.6s ease-in-out infinite; }
+  @keyframes hintblink { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+
+  .doll-slot { cursor: default; }
+  .board.ready .doll-slot { cursor: pointer; }
+  .board.ready .doll-slot:hover svg { animation-play-state: paused; transform: scale(1.06); transition: transform .25s ease; }
+
+  .actions { text-align: center; margin-top: 26px; position: relative; z-index: 2; }
+  .play-again {
+    border: none; border-radius: 100px;
+    background: var(--navy); color: #fff;
+    font-weight: 800; font-size: 13.5px; letter-spacing: .08em;
+    padding: 12px 26px;
+    box-shadow: 0 6px 0 rgba(35,35,79,.3);
+    transition: transform .2s ease;
+    display: inline-block;
+  }
+  .play-again:hover { transform: translateY(-3px); }
+
+  /* ---------- 板块 3D 娃娃机（可玩） ---------- */
+  .gstage {
+    position: relative; height: 700px; max-width: 820px; margin: 0 auto;
+    perspective: 1500px; perspective-origin: 50% 40%; z-index: 2;
+  }
+  .gstage::before {
+    content: ""; position: absolute; left: 50%; top: 44%;
+    width: 680px; height: 680px; transform: translate(-50%,-50%);
+    background: repeating-conic-gradient(from -90deg, rgba(255,255,255,.5) 0deg 7deg, rgba(255,255,255,0) 7deg 15deg);
+    border-radius: 50%;
+    -webkit-mask-image: radial-gradient(closest-side, #000 22%, transparent 76%);
+    mask-image: radial-gradient(closest-side, #000 22%, transparent 76%);
+    z-index: -1;
+    animation: burstspin 40s linear infinite;
+  }
+  @keyframes burstspin { to { transform: translate(-50%,-50%) rotate(360deg); } }
+  .gstage .scene { scale: 1.14; }
+  .gscene { animation: scenesway 9s ease-in-out infinite alternate; }
+  @keyframes scenesway {
+    from { transform: rotateX(8deg) rotateY(-8deg); }
+    to   { transform: rotateX(6deg) rotateY(7deg); }
+  }
+  .gscene .p-back { background-color: var(--cabback, #ff9fc4); }
+  .gscene .p-left { background: var(--cab1, #8fd0ff); }
+  .gscene .p-right { background: var(--cab1, #6db9fa); }
+  .gscene .p-top { background: var(--cab2, #a8dcff); }
+  .gscene .p-glass { border-color: var(--cab1, #79c1ff); pointer-events: auto; cursor: pointer; touch-action: pan-y; }
+  .gscene .p-base { background: var(--based, #fff); }
+  .gscene .p-base-top { background: var(--based2, #ffe9f2); }
+  .gscene .claw3d { margin-left: 42%; animation: none; }
+  .gscene .claw-arm { transition: transform .45s ease; }
+  .gscene .claw3d.shut .claw-arm.left { transform: rotate(-15deg); }
+  .gscene .claw3d.shut .claw-arm.right { transform: rotate(15deg); }
+  .gscene .cable3 { height: 104px; }
+  .cable3 { transition: height 1.05s cubic-bezier(.5,0,.3,1); }
+
+  .g-doll {
+    position: absolute; bottom: 26px; width: 96px; z-index: 3;
+    transition: opacity .35s ease, transform .35s ease;
+    pointer-events: auto; cursor: pointer;
+  }
+  .g-doll svg { width: 100%; display: block; filter: drop-shadow(0 8px 8px rgba(35,35,79,.18)); animation: dollbob 3.4s ease-in-out infinite; }
+  .g-doll.gone { opacity: 0; transform: translateY(34px) scale(.6); }
+
+  .gpuff {
+    position: absolute; bottom: -12px; width: 82px; height: 60px; border-radius: 50%;
+    background: #fff; box-shadow: 0 -8px 0 rgba(255,255,255,.85); z-index: 2;
+  }
+
+  .caught-slot { display: none; margin-top: -4px; width: 112px; cursor: pointer; }
+  .caught-slot svg { width: 100%; display: block; filter: drop-shadow(0 8px 10px rgba(35,35,79,.22)); }
+  .claw3d.caught .caught-slot { display: block; animation: dollswing 2.8s ease-in-out infinite; transform-origin: top center; }
+
+  /* ---------- 展开详情 ---------- */
+  .detail {
+    display: grid; grid-template-rows: 0fr;
+    transition: grid-template-rows .8s cubic-bezier(.5,0,.2,1);
+    position: relative; z-index: 2;
+    margin-top: 8px;
+  }
+  .detail-inner { overflow: hidden; }
+  .board.opened .detail { grid-template-rows: 1fr; }
+  .detail-card {
+    background: #fffdf7;
+    border-radius: 30px;
+    box-shadow: 0 24px 50px -18px rgba(35,35,79,.4);
+    padding: clamp(24px, 5vw, 48px);
+    margin-top: 26px;
+  }
+
+  /* --- About --- */
+  .hi-line { font-size: clamp(30px, 5.6vw, 56px); font-weight: 900; letter-spacing: -.02em; line-height: 1.05; margin: 0 0 6px; }
+  .hi-line .hl { color: var(--green); text-shadow: 2px 2px 0 rgba(35,35,79,.15); }
+  .hi-sub { color: #8a8aa8; font-weight: 600; margin: 0 0 26px; }
+  .info-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px 28px;
+    background: #f4f7ff; border-radius: 20px; padding: 24px 26px;
+  }
+  .info-item { font-size: 14.5px; }
+  .info-item .k { color: #8a8aa8; font-size: 12.5px; font-weight: 700; letter-spacing: .06em; display: block; }
+  .info-item .v { font-weight: 700; word-break: break-all; }
+  .skill-chips { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip { border-radius: 100px; padding: 8px 18px; font-size: 13.5px; font-weight: 700; }
+
+  /* --- Ticket 卡（项目） --- */
+  .ticket {
+    position: relative;
+    border: 3px dashed var(--ticket-color, var(--blue));
+    border-radius: 22px;
+    background: #fff;
+    padding: 24px 26px;
+    margin-bottom: 22px;
+  }
+  .ticket::before, .ticket::after {
+    content: "★";
+    position: absolute; font-size: 14px; color: var(--ticket-color, var(--blue));
+  }
+  .ticket::before { top: 8px; left: 12px; }
+  .ticket::after { bottom: 8px; right: 12px; }
+  .ticket .t-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .ticket h3 { margin: 0; font-size: 19px; }
+  .ticket .t-no { font-weight: 900; font-size: 26px; color: var(--ticket-color, var(--blue)); letter-spacing: .04em; }
+  .ticket p { margin: 10px 0 0; font-size: 14.5px; color: #55556e; }
+  .ticket ul { margin: 10px 0 0; padding-left: 20px; font-size: 14.5px; color: #55556e; }
+  .ticket ul li { margin-bottom: 4px; }
+
+  .open-chip {
+    display: inline-block; margin-top: 14px;
+    background: var(--yellow); color: var(--navy);
+    font-weight: 900; font-size: 13px; letter-spacing: .1em;
+    border-radius: 12px; padding: 9px 18px;
+    box-shadow: 0 4px 0 rgba(35,35,79,.2);
+  }
+
+  /* --- 图片画廊 --- */
+  .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 6px 0 22px; }
+  .gallery img { border-radius: 18px; box-shadow: 0 10px 24px -10px rgba(35,35,79,.35); aspect-ratio: 4/3; object-fit: cover; width: 100%; }
+  .gallery img.tall { aspect-ratio: 3/4; }
+  .gallery img.wide { grid-column: 1 / -1; aspect-ratio: 21/8; }
+  .gallery figcaption { font-size: 12px; color: #9a9ab2; text-align: center; margin-top: 6px; }
+  .gallery figure { margin: 0; }
+  .g-poster { display: flex; justify-content: center; }
+  .g-poster img {
+    display: block;
+    width: auto; height: auto;
+    max-width: min(440px, 86vw); max-height: 620px;
+    object-fit: contain; object-position: center;
+    margin: 0 auto;
+    border-radius: 18px; box-shadow: 0 10px 24px -10px rgba(35,35,79,.35);
+  }
+
+  /* 整齐画廊（第二板块）：图片完整显示、不裁切、格子对齐 */
+  .gallery.clean { grid-template-columns: 1.1fr .9fr; grid-auto-rows: 262px; }
+  .gallery.clean figure { display: flex; flex-direction: column; min-height: 0; }
+  .gallery.clean img {
+    flex: 1; height: auto; min-height: 0;
+    aspect-ratio: auto;
+    object-fit: contain;
+    background: #f4f5fb;
+    padding: 10px;
+  }
+  .gallery.clean figure.span2 { grid-row: span 2; }
+  .gallery.clean figcaption { flex: none; margin-top: 7px; }
+
+  /* --- Thanks --- */
+  .thanks-card { text-align: center; background: rgba(255,255,255,.14); border: 3px dashed rgba(255,255,255,.65); }
+  .thanks-card .big {
+    font-size: clamp(34px, 6.4vw, 64px); font-weight: 900; letter-spacing: -.02em; line-height: 1.05;
+    color: #fff; margin: 0;
+  }
+  .thanks-card .big .gd { color: var(--green); }
+  .thanks-card .big .lt { color: rgba(255,255,255,.45); }
+  .thanks-card p { color: rgba(255,255,255,.9); font-weight: 600; }
+  .mail-chip {
+    display: inline-block; background: var(--yellow); color: var(--navy);
+    font-weight: 900; font-size: clamp(16px, 3vw, 22px);
+    border-radius: 18px; padding: 14px 30px;
+    box-shadow: 0 8px 0 rgba(35,35,79,.3);
+    transform: rotate(-1.5deg);
+    transition: transform .25s ease;
+    word-break: break-all;
+  }
+  .mail-chip:hover { transform: rotate(0deg) scale(1.04); }
+  .social-row { margin-top: 18px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .social-row a {
+    background: #fff; color: var(--navy);
+    font-weight: 800; font-size: 13px;
+    padding: 9px 18px; border-radius: 100px;
+    box-shadow: 0 4px 0 rgba(35,35,79,.18);
+  }
+  .wechat-block { margin-top: 26px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .wechat-block img {
+    width: min(230px, 62vw);
+    background: #fff; border-radius: 18px; padding: 10px;
+    box-shadow: 0 10px 24px -10px rgba(35,35,79,.4);
+    transform: rotate(1.5deg);
+    transition: transform .25s ease;
+  }
+  .wechat-block img:hover { transform: rotate(0deg) scale(1.03); }
+  .wechat-invite { color: rgba(255,255,255,.92); font-weight: 700; font-size: 14.5px; margin: 0; text-shadow: 0 1px 3px rgba(35,35,79,.25); }
+  .wechat-invite b { color: var(--green); }
+
+  footer { background: var(--navy); color: #b9b9d6; text-align: center; font-size: 13px; padding: 30px 20px 36px; }
+
+  /* ---------- 封面 3D ---------- */
+  .cover {
+    position: relative; min-height: 100vh;
+    display: flex; align-items: center;
+    background: #ffd335; overflow: hidden;
+    padding: 90px 4vw 60px;
+  }
+  .cover-bg {
+    position: absolute; inset: 0; z-index: 0;
+    display: flex; flex-direction: column; justify-content: center;
+    font-size: clamp(90px, 16vw, 200px); font-weight: 900; line-height: .9;
+    color: rgba(255,255,255,.32); letter-spacing: -.02em;
+    padding-left: 3vw; white-space: nowrap; user-select: none; pointer-events: none;
+  }
+  .cover-flex {
+    position: relative; z-index: 2;
+    width: 100%; max-width: 1180px; margin: 0 auto;
+    display: grid; grid-template-columns: .85fr 1.15fr; gap: 24px; align-items: center;
+  }
+  .cover-copy { position: relative; z-index: 3; }
+  .cover-title {
+    font-size: clamp(56px, 9vw, 110px); font-weight: 900; letter-spacing: .04em;
+    color: #fff; text-shadow: 0 6px 0 rgba(35,35,79,.18);
+    margin: 0 0 10px; line-height: 1.05;
+  }
+  .cover-kicker {
+    display: inline-block; background: var(--pink-deep); color: #fff;
+    font-weight: 800; font-size: clamp(13px, 2.2vw, 16px); letter-spacing: .22em;
+    border-radius: 100px; padding: 9px 26px;
+    transform: rotate(-2deg);
+    box-shadow: 0 6px 0 rgba(35,35,79,.2);
+    margin: 0 0 18px;
+  }
+  .cover-sub, .cover-hint {
+    font-weight: 700; font-size: clamp(14px, 2.4vw, 17px); color: rgba(35,35,79,.75);
+    margin: 12px 0 0;
+  }
+  .cover-hint { animation: hintblink 1.8s ease-in-out infinite; }
+  @keyframes hintblink { 0%,100% { transform: translateY(0); opacity: 1; } 50% { transform: translateY(5px); opacity: .7; } }
+
+  /* 3D 舞台 */
+  .stage {
+    position: relative; height: 680px;
+    perspective: 1500px; perspective-origin: 50% 42%;
+    z-index: 2;
+  }
+  .cover .scene { scale: 1.06; }
+  .scene {
+    position: absolute; left: 50%; top: 50%;
+    width: 520px; height: 580px;
+    margin: -290px 0 0 -260px;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+  .panel { position: absolute; backface-visibility: hidden; }
+  .p-ground {
+    left: -60px; top: 555px; width: 720px; height: 110px;
+    transform: translateZ(-190px) rotateX(90deg);
+    background: radial-gradient(closest-side, rgba(35,35,79,.22), transparent);
+    border-radius: 50%;
+  }
+  .p-back {
+    left: 0; top: 30px; width: 520px; height: 400px;
+    transform: translateZ(-190px);
+    background-color: #ff9fc4;
+    background-image: radial-gradient(rgba(255,255,255,.4) 7px, transparent 8px);
+    background-size: 72px 64px;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .rail3 { position: absolute; top: 0; left: 0; width: 100%; height: 16px; background: #23234f; }
+  .claw3d {
+    position: absolute; top: 16px; left: 0; width: 100%;
+    display: flex; flex-direction: column; align-items: center;
+    animation: patrol 8s ease-in-out infinite alternate;
+  }
+  @keyframes patrol { 0% { margin-left: 10%; } 50% { margin-left: 62%; } 100% { margin-left: 28%; } }
+  .cable3 { width: 9px; height: 104px; background: #23234f; border-radius: 5px; flex: none; }
+
+  .p-top {
+    left: 0; top: 30px; width: 520px; height: 190px;
+    transform-origin: center top; transform: rotateX(-89deg);
+    background: linear-gradient(#a8dcff, #8fd0ff);
+    border-radius: 16px 16px 0 0;
+  }
+  .p-left {
+    left: 0; top: 30px; width: 190px; height: 400px;
+    transform-origin: left center; transform: rotateY(89deg);
+    background: #8fd0ff; border-radius: 16px 0 0 16px;
+    box-shadow: inset -30px 0 40px rgba(35,35,79,.08);
+  }
+  .p-right {
+    right: 0; top: 30px; width: 190px; height: 400px;
+    transform-origin: right center; transform: rotateY(-89deg);
+    background: #6db9fa; border-radius: 0 16px 16px 0;
+    box-shadow: inset 30px 0 40px rgba(35,35,79,.08);
+  }
+  .p-glass {
+    left: 0; top: 30px; width: 520px; height: 400px;
+    transform: translateZ(26px);
+    border: 15px solid #79c1ff; border-bottom: none;
+    border-radius: 24px 24px 0 0;
+    background: linear-gradient(115deg, rgba(255,255,255,.35), rgba(255,255,255,0) 55%);
+    pointer-events: none;
+  }
+  .p-base {
+    left: -30px; top: 432px; width: 580px; height: 128px;
+    transform: translateZ(0);
+    background: #fff; border-radius: 18px 18px 36px 36px;
+    box-shadow: inset 0 -14px 0 rgba(35,35,79,.06);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 30px;
+  }
+  .p-base-top {
+    left: -30px; top: 422px; width: 580px; height: 190px;
+    transform-origin: center top; transform: rotateX(-89deg);
+    background: #ffe9f2; border-radius: 20px;
+  }
+  /* 底座细节（billboard） */
+  .b-joystick { position: relative; width: 56px; height: 66px; flex: none; }
+  .b-joystick .stick {
+    position: absolute; bottom: 10px; left: 50%; width: 9px; height: 42px;
+    background: #23234f; border-radius: 5px;
+    transform: translateX(-50%) rotate(-9deg); transform-origin: bottom center;
+  }
+  .b-joystick .ball {
+    position: absolute; top: 0; left: 50%; width: 30px; height: 30px; border-radius: 50%;
+    background: var(--pink-deep);
+    box-shadow: inset -4px -5px 0 rgba(35,35,79,.18), 0 6px 10px rgba(35,35,79,.2);
+    transform: translateX(-42%);
+  }
+  .b-start {
+    width: 92px; height: 46px; border-radius: 50%;
+    background: radial-gradient(circle at 38% 32%, #ff9cc6, var(--pink-deep) 70%);
+    box-shadow: 0 8px 0 rgba(35,35,79,.22), inset 0 -7px 0 rgba(35,35,79,.14);
+    border: none; color: #fff; font-weight: 900; font-size: 12px; letter-spacing: .18em;
+    display: grid; place-items: center; margin-top: 12px;
+    cursor: pointer; transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .b-start:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 0 rgba(35,35,79,.22), inset 0 -7px 0 rgba(35,35,79,.14), 0 14px 26px -8px rgba(35,35,79,.35);
+  }
+  .b-start:active { transform: translateY(2px); box-shadow: 0 4px 0 rgba(35,35,79,.22), inset 0 -7px 0 rgba(35,35,79,.14); }
+  .b-start::after { content: "START"; }
+  .b-coin-label {
+    background: #fff; border-radius: 12px; padding: 10px 14px;
+    font-weight: 900; font-size: 11px; letter-spacing: .18em;
+    box-shadow: 0 4px 0 rgba(35,35,79,.12);
+    display: flex; align-items: center; gap: 8px; flex: none;
+    margin-top: 8px;
+  }
+  .b-coin-label::before { content: "▮"; font-size: 14px; }
+
+  /* 机器里的娃娃（billboard，分层深度） */
+  .doll3d { position: absolute; pointer-events: none; }
+  .doll3d svg { width: 100%; display: block; filter: drop-shadow(0 10px 10px rgba(35,35,79,.18)); animation: dollbob 3.4s ease-in-out infinite; }
+  @keyframes dollbob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+  .d-dino  { left: 36px;  top: 322px; width: 112px; transform: translateZ(-120px); }
+  .d-whale { left: 165px; top: 312px; width: 122px; transform: translateZ(-152px); }
+  .d-whale svg { animation-delay: .6s; }
+  .d-star  { left: 312px; top: 296px; width: 100px; transform: translateZ(-176px); }
+  .d-star svg { animation-delay: 1.1s; }
+  .d-bunny { left: 415px; top: 324px; width: 106px; transform: translateZ(-132px); }
+  .d-bunny svg { animation-delay: 1.6s; }
+
+  .puff3d {
+    position: absolute; width: 84px; height: 62px; border-radius: 50%;
+    background: #fff; box-shadow: 0 -8px 0 rgba(255,255,255,.85);
+    pointer-events: none;
+  }
+  .pf1 { left: 20px;  top: 372px; transform: translateZ(-90px); }
+  .pf2 { left: 110px; top: 388px; transform: translateZ(-140px); background: #eef4ff; }
+  .pf3 { left: 210px; top: 380px; transform: translateZ(-110px); }
+  .pf4 { left: 310px; top: 392px; transform: translateZ(-160px); background: #ffeef5; }
+  .pf5 { left: 400px; top: 376px; transform: translateZ(-100px); }
+  .pf6 { left: 460px; top: 396px; transform: translateZ(-150px); }
+
+  /* 漂浮旋转硬币（billboard 覆盖层） */
+  .coin-wrap {
+    position: absolute; right: 3%; bottom: 130px; z-index: 8;
+    cursor: pointer; border: none; background: none; padding: 0;
+    animation: coinfloat 2.6s ease-in-out infinite;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .coin-float {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff3b8, #ffc93c 58%, #f0a93c);
+    border: 5px solid #fff;
+    box-shadow: 0 12px 22px rgba(35,35,79,.3), inset 0 -7px 0 rgba(35,35,79,.16);
+    display: grid; place-items: center;
+    font-weight: 900; font-size: 30px; color: rgba(35,35,79,.75);
+    animation: coinspin 3.4s linear infinite;
+    transform-style: preserve-3d;
+  }
+  @keyframes coinfloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
+  @keyframes coinspin { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(360deg); } }
+  .coin-wrap:hover .coin-float { box-shadow: 0 12px 30px rgba(35,35,79,.4), inset 0 -7px 0 rgba(35,35,79,.16); }
+  .coin-tip {
+    position: absolute; left: 50%; top: -34px; transform: translateX(-50%);
+    white-space: nowrap; background: #fff; color: var(--navy);
+    font-size: 12px; font-weight: 800; letter-spacing: .08em;
+    border-radius: 100px; padding: 6px 14px;
+    box-shadow: 0 4px 0 rgba(35,35,79,.15);
+    animation: coinfloat 2.6s ease-in-out infinite;
+  }
+  .coin.glow { animation: coinglow .45s ease-in-out 3; background: var(--yellow); }
+  @keyframes coinglow {
+    0%,100% { box-shadow: 0 4px 0 rgba(35,35,79,.12); }
+    50% { box-shadow: 0 0 0 6px rgba(255,201,60,.65), 0 4px 0 rgba(35,35,79,.12); }
+  }
+  .cover.inserted .coin-tip { display: none; }
+  .cover.inserted .coin-float { animation: none; }
+  .cover.inserted .stage { animation: none; }
+
+  @media (max-width: 900px) {
+    .cover { padding: 80px 5vw 50px; }
+    .cover-flex { grid-template-columns: 1fr; gap: 8px; }
+    .cover-copy { text-align: center; }
+    .stage { height: 470px; }
+    .scene { scale: .72; }
+    .coin-wrap { right: 6%; bottom: 90px; }
+    .coin-float { width: 58px; height: 58px; font-size: 24px; }
+    .gstage { height: 520px; }
+    .gstage .scene { scale: .76; }
+    .gstage::before { width: 500px; height: 500px; }
+  }
+
+  /* ---------- 响应式 ---------- */
+
+  /* ---------- 响应式 ---------- */
+  @media (max-width: 640px) {
+    .board { padding: 90px 0 70px; }
+    .topnav { padding: 10px 14px; }
+    .topnav nav a { padding: 6px 10px; font-size: 12.5px; }
+    .info-grid { grid-template-columns: 1fr; }
+    .gallery, .gallery.clean { grid-template-columns: 1fr; grid-auto-rows: auto; }
+    .gallery.clean img { height: 240px; flex: none; }
+    .gallery img.wide { aspect-ratio: 16/9; }
+    .m-base { padding: 0 16px; height: 100px; }
+    .coin { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .rig, .cable, .claw-arm, .doll-slot { transition-duration: .01s !important; }
+    .board.ready .doll-slot svg, .board.ready .hint { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════ 娃娃 SVG 符号库 ═══════ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- 绿色 Q 版小恐龙 -->
+    <symbol id="doll-dino" viewBox="0 0 120 130">
+      <ellipse cx="44" cy="44" rx="8" ry="9" fill="#9fd632"/>
+      <ellipse cx="60" cy="38" rx="9" ry="10" fill="#9fd632"/>
+      <ellipse cx="76" cy="44" rx="8" ry="9" fill="#9fd632"/>
+      <ellipse cx="60" cy="80" rx="45" ry="42" fill="#b9e94c"/>
+      <ellipse cx="60" cy="96" rx="26" ry="19" fill="#e2f8a8"/>
+      <ellipse cx="18" cy="90" rx="11" ry="9" fill="#b9e94c"/>
+      <ellipse cx="102" cy="90" rx="11" ry="9" fill="#b9e94c"/>
+      <rect x="45" y="62" width="9" height="19" rx="4.5" fill="#23234f"/>
+      <rect x="66" y="62" width="9" height="19" rx="4.5" fill="#23234f"/>
+      <circle cx="36" cy="80" r="6" fill="#ff9fb8" opacity=".75"/>
+      <circle cx="84" cy="80" r="6" fill="#ff9fb8" opacity=".75"/>
+      <path d="M52 88 Q60 96 68 88" stroke="#23234f" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+    </symbol>
+
+    <!-- 蓝色 Q 版小鲸鱼 -->
+    <symbol id="doll-whale" viewBox="0 0 120 130">
+      <path d="M60 18 q-3 -9 3 -12" stroke="#8fd0ff" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <circle cx="64" cy="8" r="4" fill="#8fd0ff"/>
+      <ellipse cx="60" cy="76" rx="47" ry="42" fill="#5ba8f5"/>
+      <path d="M18 88 Q60 116 102 88 Q60 102 18 88 Z" fill="#cfe8ff"/>
+      <path d="M104 66 Q120 52 114 38 Q122 58 108 74 Z" fill="#5ba8f5"/>
+      <rect x="44" y="60" width="9" height="19" rx="4.5" fill="#23234f"/>
+      <rect x="66" y="60" width="9" height="19" rx="4.5" fill="#23234f"/>
+      <circle cx="34" cy="78" r="6" fill="#ff9fb8" opacity=".75"/>
+      <circle cx="86" cy="78" r="6" fill="#ff9fb8" opacity=".75"/>
+      <path d="M52 86 Q60 94 68 86" stroke="#23234f" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+    </symbol>
+
+    <!-- 黄色 Q 版星星 -->
+    <symbol id="doll-star" viewBox="0 0 120 130">
+      <path d="M60 14 L74 50 L114 54 L84 78 L93 116 L60 94 L27 116 L36 78 L6 54 L46 50 Z"
+            fill="#ffc93c" stroke="#ffc93c" stroke-width="18" stroke-linejoin="round"/>
+      <rect x="46" y="62" width="9" height="19" rx="4.5" fill="#23234f"/>
+      <rect x="66" y="62" width="9" height="19" rx="4.5" fill="#23234f"/>
+      <circle cx="36" cy="80" r="6" fill="#ff9fb8" opacity=".8"/>
+      <circle cx="84" cy="80" r="6" fill="#ff9fb8" opacity=".8"/>
+      <path d="M52 88 Q60 96 68 88" stroke="#23234f" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+    </symbol>
+
+    <!-- 马卡龙紫 Q 版兔子 -->
+    <symbol id="doll-bunny" viewBox="0 0 120 130">
+      <g transform="rotate(-10 42 40)">
+        <ellipse cx="42" cy="30" rx="12" ry="28" fill="#c9a6f2"/>
+        <ellipse cx="42" cy="32" rx="6" ry="18" fill="#e9dcff"/>
+      </g>
+      <g transform="rotate(10 78 40)">
+        <ellipse cx="78" cy="30" rx="12" ry="28" fill="#c9a6f2"/>
+        <ellipse cx="78" cy="32" rx="6" ry="18" fill="#e9dcff"/>
+      </g>
+      <ellipse cx="60" cy="86" rx="44" ry="40" fill="#c9a6f2"/>
+      <ellipse cx="60" cy="100" rx="25" ry="18" fill="#e9dcff"/>
+      <ellipse cx="16" cy="94" rx="11" ry="9" fill="#c9a6f2"/>
+      <ellipse cx="104" cy="94" rx="11" ry="9" fill="#c9a6f2"/>
+      <rect x="45" y="66" width="9" height="19" rx="4.5" fill="#23234f"/>
+      <rect x="66" y="66" width="9" height="19" rx="4.5" fill="#23234f"/>
+      <circle cx="35" cy="84" r="6" fill="#ff9fb8" opacity=".8"/>
+      <circle cx="85" cy="84" r="6" fill="#ff9fb8" opacity=".8"/>
+      <path d="M52 92 Q60 100 68 92" stroke="#23234f" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+    </symbol>
+
+    <!-- 米白色小白鹅 -->
+    <symbol id="doll-goose" viewBox="0 0 120 130">
+      <ellipse cx="60" cy="80" rx="45" ry="42" fill="#f6efdd"/>
+      <ellipse cx="60" cy="97" rx="26" ry="18" fill="#fffdf4"/>
+      <ellipse cx="16" cy="90" rx="11" ry="9" fill="#f6efdd"/>
+      <ellipse cx="104" cy="90" rx="11" ry="9" fill="#f6efdd"/>
+      <path d="M54 40 Q60 30 66 40" stroke="#e8ddc2" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <rect x="44" y="62" width="9" height="19" rx="4.5" fill="#23234f"/>
+      <rect x="67" y="62" width="9" height="19" rx="4.5" fill="#23234f"/>
+      <ellipse cx="60" cy="88" rx="15" ry="8" fill="#f2a65a"/>
+      <path d="M46 88 H74" stroke="#d98c3f" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="34" cy="78" r="6" fill="#ff9fb8" opacity=".7"/>
+      <circle cx="86" cy="78" r="6" fill="#ff9fb8" opacity=".7"/>
+    </symbol>
+
+    <!-- 爪子 -->
+    <symbol id="claw" viewBox="0 0 70 56">
+      <rect x="16" y="0" width="38" height="15" rx="7.5" fill="#2a3272"/>
+      <path class="claw-arm left" d="M25 14 Q14 30 26 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path class="claw-arm right" d="M45 14 Q56 30 44 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ═══════ 导航 ═══════ -->
+<header class="topnav">
+  <span class="logo">🎮 claw portfolio</span>
+  <nav>
+    <a href="#about">About 🦖</a>
+    <a href="#fridge">作品① 🐳</a>
+    <a href="#mat">作品② ⭐</a>
+    <a href="#guojia">作品③ 🪿</a>
+    <a href="#thanks">Thanks 🐰</a>
+  </nav>
+</header>
+
+<!-- ═══════ 封面 · 3D 娃娃机 · 投币开始 ═══════ -->
+<section class="cover" id="cover">
+  <div class="cover-bg">PORTFOLIO<br>PORTFOLIO</div>
+
+  <div class="cover-flex">
+    <div class="cover-copy">
+      <p class="cover-kicker">🎮 ZHANG XINYAN · 2026</p>
+      <h1 class="cover-title">作品集</h1>
+      <p class="cover-sub">一台娃娃机 · 四个娃娃 · 两个小作品</p>
+      <p class="cover-hint" id="cover-hint">🖱️ 移动鼠标转动机器 · 点击硬币投币开始</p>
+    </div>
+
+    <div class="stage" id="stage">
+      <div class="scene" id="scene">
+        <div class="panel p-ground"></div>
+        <div class="panel p-back">
+          <div class="rail3"></div>
+          <div class="claw3d">
+            <div class="cable3"></div>
+            <svg width="70" height="56" viewBox="0 0 70 56"><use href="#claw"/></svg>
+          </div>
+        </div>
+        <div class="panel p-top"></div>
+        <div class="panel p-left"></div>
+        <div class="panel p-right"></div>
+
+        <div class="doll3d d-dino"><svg viewBox="0 0 120 130"><use href="#doll-dino"/></svg></div>
+        <div class="doll3d d-whale"><svg viewBox="0 0 120 130"><use href="#doll-whale"/></svg></div>
+        <div class="doll3d d-star"><svg viewBox="0 0 120 130"><use href="#doll-star"/></svg></div>
+        <div class="doll3d d-bunny"><svg viewBox="0 0 120 130"><use href="#doll-bunny"/></svg></div>
+        <div class="puff3d pf1"></div><div class="puff3d pf2"></div><div class="puff3d pf3"></div>
+        <div class="puff3d pf4"></div><div class="puff3d pf5"></div><div class="puff3d pf6"></div>
+
+        <div class="panel p-glass"></div>
+        <div class="panel p-base-top"></div>
+        <div class="panel p-base">
+          <div class="b-joystick"><span class="stick"></span><span class="ball"></span></div>
+          <button class="b-start" aria-label="开始"></button>
+          <div class="b-coin-label" id="coin-slot">COIN</div>
+        </div>
+
+        <button class="coin-wrap" id="coin-btn" aria-label="点击硬币投币，进入作品集">
+          <span class="coin-tip">点我投币 →</span>
+          <span class="coin-float">¥</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 板块 1 · 娃娃机抓恐龙 → 个人简介 ═══════ -->
+<section class="board board-s1" id="about" data-game>
+  <div class="bg-word">ABOUT<br>HI, I'M</div>
+  <div class="wrap">
+    <div class="board-title">
+      <p class="en">PLAYER 1 · <span style="color:#fff">ABOUT</span></p>
+      <p class="zh">滚动到这里，爪子会替你抓出我的自我介绍 🦖</p>
+    </div>
+
+    <div class="stage gstage" style="--cabback:#ff9fc4; --cab1:#79c1ff; --cab2:#a8dcff; --based:#fff; --based2:#ffe9f2;">
+      <div class="scene gscene">
+        <div class="panel p-ground"></div>
+        <div class="panel p-back cabback">
+          <div class="rail3"></div>
+          <div class="claw3d">
+            <div class="cable3"></div>
+            <svg class="claw-svg" width="70" height="56" viewBox="0 0 70 56">
+              <rect x="16" y="0" width="38" height="15" rx="7.5" fill="#2a3272"/>
+              <path class="claw-arm left" d="M25 14 Q14 30 26 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+              <path class="claw-arm right" d="M45 14 Q56 30 44 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+            </svg>
+            <div class="caught-slot" tabindex="0" role="button" aria-label="查看板块内容">
+              <svg viewBox="0 0 120 130"><use class="caught-use" href="#doll-dino"/></svg>
+            </div>
+          </div>
+          <div class="g-doll" data-sym="#doll-dino" style="left:42%; animation-delay:.9s;"><svg viewBox="0 0 120 130"><use href="#doll-dino"/></svg></div>
+          <div class="gpuff" style="left:4%;"></div>
+          <div class="gpuff" style="left:30%; background:#eef4ff;"></div>
+          <div class="gpuff" style="left:58%;"></div>
+          <div class="gpuff" style="left:80%; background:#ffeef5;"></div>
+        </div>
+        <div class="panel p-top"></div>
+        <div class="panel p-left"></div>
+        <div class="panel p-right"></div>
+        <div class="panel p-glass ghit"></div>
+        <div class="panel p-base-top"></div>
+        <div class="panel p-base">
+          <div class="b-joystick"><span class="stick"></span><span class="ball"></span></div>
+          <button class="b-start gdrop" aria-label="下爪抓娃娃"></button>
+          <div class="b-coin-label">COIN</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="hint">👆 点击小恐龙，爪子会自动把它抓起来看我的介绍 🦖</p>
+
+    <div class="detail">
+      <div class="detail-inner">
+        <div class="detail-card">
+          <h2 class="hi-line">HI, I'M <span class="hl">章欣妍</span> 🦖</h2>
+          <p class="hi-sub">艺术与科技专业 · 开朗乐观 · 善于沟通协调</p>
+          <div class="info-grid">
+            <div class="info-item"><span class="k">出生年月 · BIRTH</span><span class="v">2006 年 7 月</span></div>
+            <div class="info-item"><span class="k">籍贯 · HOMETOWN</span><span class="v">福建</span></div>
+            <div class="info-item"><span class="k">手机 · PHONE</span><span class="v">13871478111</span></div>
+            <div class="info-item"><span class="k">地址 · LOCATION</span><span class="v">湖北省武汉市</span></div>
+            <div class="info-item"><span class="k">邮箱 · EMAIL</span><span class="v">486516958@qq.com</span></div>
+            <div class="info-item"><span class="k">方向 · FOCUS</span><span class="v">产品设计 / 用户调研</span></div>
+          </div>
+          <div class="skill-chips">
+            <span class="chip" style="background:var(--pink);">🔍 用户访谈</span>
+            <span class="chip" style="background:var(--green);">📊 竞品分析</span>
+            <span class="chip" style="background:var(--yellow);">✏️ 方案设计</span>
+            <span class="chip" style="background:var(--purple);">🛡️ 风险评估</span>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions"><button class="play-again">↻ 把我放回去，再抓一次</button></div>
+  </div>
+</section>
+
+<!-- ═══════ 板块 2 · 娃娃机抓鲸鱼 → 作品一：冰箱食材台账 ═══════ -->
+<section class="board board-s2" id="fridge" data-game>
+  <div class="bg-word">WORK<br>NO.01</div>
+  <div class="wrap">
+    <div class="board-title">
+      <p class="en">WORK <span style="color:var(--blue)">01</span> 🐳</p>
+      <p class="zh">爪子捞上来一条小鲸鱼 · 它背着我第一个作品：轻量化冰箱食材台账</p>
+    </div>
+
+    <div class="stage gstage" style="--cabback:#bfe0ff; --cab1:#5ba8f5; --cab2:#8fd0ff; --based:#eaf4ff; --based2:#dcecff;">
+      <div class="scene gscene">
+        <div class="panel p-ground"></div>
+        <div class="panel p-back cabback">
+          <div class="rail3"></div>
+          <div class="claw3d">
+            <div class="cable3"></div>
+            <svg class="claw-svg" width="70" height="56" viewBox="0 0 70 56">
+              <rect x="16" y="0" width="38" height="15" rx="7.5" fill="#2a3272"/>
+              <path class="claw-arm left" d="M25 14 Q14 30 26 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+              <path class="claw-arm right" d="M45 14 Q56 30 44 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+            </svg>
+            <div class="caught-slot" tabindex="0" role="button" aria-label="查看板块内容">
+              <svg viewBox="0 0 120 130"><use class="caught-use" href="#doll-whale"/></svg>
+            </div>
+          </div>
+          <div class="g-doll" data-sym="#doll-whale" style="left:42%; animation-delay:.9s;"><svg viewBox="0 0 120 130"><use href="#doll-whale"/></svg></div>
+          <div class="gpuff" style="left:4%;"></div>
+          <div class="gpuff" style="left:30%; background:#eef4ff;"></div>
+          <div class="gpuff" style="left:58%;"></div>
+          <div class="gpuff" style="left:80%; background:#ffeef5;"></div>
+        </div>
+        <div class="panel p-top"></div>
+        <div class="panel p-left"></div>
+        <div class="panel p-right"></div>
+        <div class="panel p-glass ghit"></div>
+        <div class="panel p-base-top"></div>
+        <div class="panel p-base">
+          <div class="b-joystick"><span class="stick"></span><span class="ball"></span></div>
+          <button class="b-start gdrop" aria-label="下爪抓娃娃"></button>
+          <div class="b-coin-label">COIN</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="hint">👆 点击小鲸鱼，抓起来打开作品一 🐳</p>
+
+    <div class="detail">
+      <div class="detail-inner">
+        <div class="detail-card">
+
+          <div class="ticket" style="--ticket-color:var(--blue);">
+            <div class="t-head"><h3>🥕 轻量化冰箱食材台账 · PROJECT TICKET</h3><span class="t-no">NO.01</span></div>
+            <p>打开冰箱那一刻就知道有什么、什么快过期。不做昂贵的设备改造，只用一台手机解决"冰箱里的记忆盲区"。</p>
+            <ul>
+              <li>🎯 <b>问题</b>：冰箱是个"盲盒"——调研实拍里，一盒酱卤熟食保质期仅 1 天，却被遗忘到过期；剩菜保鲜盒堆了三天没人说得清日期。</li>
+              <li>📋 <b>调研</b>：12 户家庭访谈归纳（示意数据）：绿叶菜 68% 最易被遗忘，剩菜 55%，酱卤熟食 42%。</li>
+              <li>⚔️ <b>竞品</b>：高端智能冰箱"AI 之眼"很强，但要换掉整台冰箱；生鲜 App 只管买不管存；手写便签坚持不过一周。</li>
+              <li>💡 <b>方案</b>：「食库」App——语音/拍照 3 秒录入 + 🔴🟡🟢 分级临期提醒 + 家庭共享清单。</li>
+            </ul>
+            <span class="open-chip">ADMIT ONE ↗</span>
+          </div>
+
+          <div class="gallery clean">
+            <figure class="span2"><img src="__IMG_APP__" alt="食库 App 界面设计" /><figcaption>「食库」App 界面：家中有哪些食材一目了然，红点 = 临期</figcaption></figure>
+            <figure><img src="__IMG_LABEL__" alt="酱卤熟食价签" /><figcaption>调研实拍 · 保质期仅 1 天的价签</figcaption></figure>
+            <figure class="span2"><img src="__IMG_LEFTOVER__" alt="剩菜保鲜盒" /><figcaption>调研实拍 · 被遗忘的保鲜盒</figcaption></figure>
+            <figure><img src="__IMG_FRIDGE_COMP__" alt="高端智能冰箱竞品" /><figcaption>竞品观察 · 高端智能冰箱的"AI 之眼"</figcaption></figure>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="actions"><button class="play-again">↻ 把鲸鱼放回去，再抓一次</button></div>
+  </div>
+</section>
+
+<!-- ═══════ 板块 3 · 娃娃机抓星星 → 作品二：呼救垫 ═══════ -->
+<section class="board board-s3" id="mat" data-game>
+  <div class="bg-word">WORK<br>NO.02</div>
+  <div class="wrap">
+    <div class="board-title">
+      <p class="en">WORK <span style="color:#e8a20c">02</span> ⭐</p>
+      <p class="zh">这次抓到一颗小星星 · 它藏着我的第二个作品：独居老人压力感应呼救垫</p>
+    </div>
+
+    <div class="stage gstage" style="--cabback:#ffd66e; --cab1:#ffc93c; --cab2:#ffe08a; --based:#fff7dd; --based2:#ffedbb;">
+      <div class="scene gscene">
+        <div class="panel p-ground"></div>
+        <div class="panel p-back cabback">
+          <div class="rail3"></div>
+          <div class="claw3d">
+            <div class="cable3"></div>
+            <svg class="claw-svg" width="70" height="56" viewBox="0 0 70 56">
+              <rect x="16" y="0" width="38" height="15" rx="7.5" fill="#2a3272"/>
+              <path class="claw-arm left" d="M25 14 Q14 30 26 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+              <path class="claw-arm right" d="M45 14 Q56 30 44 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+            </svg>
+            <div class="caught-slot" tabindex="0" role="button" aria-label="查看板块内容">
+              <svg viewBox="0 0 120 130"><use class="caught-use" href="#doll-star"/></svg>
+            </div>
+          </div>
+          <div class="g-doll" data-sym="#doll-star" style="left:42%; animation-delay:.9s;"><svg viewBox="0 0 120 130"><use href="#doll-star"/></svg></div>
+          <div class="gpuff" style="left:4%;"></div>
+          <div class="gpuff" style="left:30%; background:#fff4d6;"></div>
+          <div class="gpuff" style="left:58%;"></div>
+          <div class="gpuff" style="left:80%; background:#ffeef5;"></div>
+        </div>
+        <div class="panel p-top"></div>
+        <div class="panel p-left"></div>
+        <div class="panel p-right"></div>
+        <div class="panel p-glass ghit"></div>
+        <div class="panel p-base-top"></div>
+        <div class="panel p-base">
+          <div class="b-joystick"><span class="stick"></span><span class="ball"></span></div>
+          <button class="b-start gdrop" aria-label="下爪抓娃娃"></button>
+          <div class="b-coin-label">COIN</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="hint">👆 点击小星星，抓起来打开作品二 ⭐</p>
+
+    <div class="detail">
+      <div class="detail-inner">
+        <div class="detail-card">
+
+          <div class="ticket" style="--ticket-color:#e8a20c;">
+            <div class="t-head"><h3>🛏️ 独居老人压力感应呼救垫 · PROJECT TICKET</h3><span class="t-no">NO.02</span></div>
+            <p>一块放在床边的"聪明垫子"：老人起夜踩上去，若长时间没有回到床上，垫子自动向家人发送呼叫。不需要穿戴、不需要学任何新东西。</p>
+            <ul>
+              <li>😢 <b>痛点</b>：独居老人深夜跌倒后往往"沉默"数小时无人知晓——不是没人管，而是没人知道。手环常忘戴、摄像头被抵触。</li>
+              <li>⚔️ <b>竞品</b>：智能手环（忘戴率高）/ 挂脖呼叫器（摔倒时可能够不到）/ 居家摄像头（隐私抵触）——而垫子恰好卡在每晚必经之路。</li>
+              <li>🛡️ <b>风险边界</b>：🔒 隐私——只测压力，坚决不上摄像头麦克风；⚠️ 误报——床头柔光提示 90 秒无回应才升级呼叫；⚖️ 责任——定位"异常提醒器"而非"急救承诺"，不制造虚假安全感。</li>
+            </ul>
+            <span class="open-chip">ADMIT ONE ↗</span>
+          </div>
+
+          <div class="gallery">
+            <figure class="wide"><img src="__IMG_MAT__" alt="压力感应呼救垫概念图" /><figcaption>床边压力感应垫 · 角落微光呼吸灯提示设备工作中</figcaption></figure>
+            <figure class="wide"><img src="__IMG_GRANDMA__" alt="独居老人场景" /><figcaption>起夜，是独居老人跌倒最高发的场景之一</figcaption></figure>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="actions"><button class="play-again">↻ 把星星放回去，再抓一次</button></div>
+  </div>
+</section>
+
+<!-- ═══════ 板块 · 娃娃机抓白鹅 → 作品三：过家家 ═══════ -->
+<section class="board board-s5" id="guojia" data-game>
+  <div class="bg-word">WORK<br>NO.03</div>
+  <div class="wrap">
+    <div class="board-title">
+      <p class="en">WORK <span style="color:#3d9b76">03</span> 🪿</p>
+      <p class="zh">这台机器里蹲着一只小白鹅 · 它叼着我的第三个作品：「过家家」文字家居展</p>
+    </div>
+
+    <div class="stage gstage" style="--cabback:#bfe8d2; --cab1:#7dc99a; --cab2:#a5dcc0; --based:#f0faf4; --based2:#d9f2e5;">
+      <div class="scene gscene">
+        <div class="panel p-ground"></div>
+        <div class="panel p-back cabback">
+          <div class="rail3"></div>
+          <div class="claw3d">
+            <div class="cable3"></div>
+            <svg class="claw-svg" width="70" height="56" viewBox="0 0 70 56">
+              <rect x="16" y="0" width="38" height="15" rx="7.5" fill="#2a3272"/>
+              <path class="claw-arm left" d="M25 14 Q14 30 26 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+              <path class="claw-arm right" d="M45 14 Q56 30 44 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+            </svg>
+            <div class="caught-slot" tabindex="0" role="button" aria-label="查看板块内容">
+              <svg viewBox="0 0 120 130"><use class="caught-use" href="#doll-goose"/></svg>
+            </div>
+          </div>
+          <div class="g-doll" data-sym="#doll-goose" style="left:42%; animation-delay:.9s;"><svg viewBox="0 0 120 130"><use href="#doll-goose"/></svg></div>
+          <div class="gpuff" style="left:4%;"></div>
+          <div class="gpuff" style="left:30%; background:#eaf7ef;"></div>
+          <div class="gpuff" style="left:58%;"></div>
+          <div class="gpuff" style="left:80%; background:#fffbe8;"></div>
+        </div>
+        <div class="panel p-top"></div>
+        <div class="panel p-left"></div>
+        <div class="panel p-right"></div>
+        <div class="panel p-glass ghit"></div>
+        <div class="panel p-base-top"></div>
+        <div class="panel p-base">
+          <div class="b-joystick"><span class="stick"></span><span class="ball"></span></div>
+          <button class="b-start gdrop" aria-label="下爪抓娃娃"></button>
+          <div class="b-coin-label">COIN</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="hint">👆 点击小白鹅，抓起来打开作品三 🪿</p>
+
+    <div class="detail">
+      <div class="detail-inner">
+        <div class="detail-card">
+
+          <div class="ticket" style="--ticket-color:#3d9b76;">
+            <div class="t-head"><h3>🪿 过家家 Guō Jiā Jiā · 文字家居展 · PROJECT TICKET</h3><span class="t-no">NO.03</span></div>
+            <p>一场把物品"文字化"的小展览：当每件家具都变成它自己的名字——<b>字就是造型，造型就是字</b>。观众走进展厅，就像走进一篇可以逛、可以坐、可以摸的文章。</p>
+            <ul>
+              <li>💡 <b>概念</b>：物品与它的名字互换身份——"凳"长出四条腿，"灯"亮成一盏灯，名字即展品，文字即家具。</li>
+              <li>🪑 <b>展陈</b>：骰子形座椅、粉色四脚凳、插着吸管的蓝瓶子……每件展品都是一则立在生活角落里的象形小品。</li>
+              <li>🖼️ <b>主视觉</b>：绿白格纹地板与撞色房间，把"家"画成一篇看得见的故事 · 展期 2025.6.27。</li>
+            </ul>
+            <span class="open-chip">ADMIT ONE ↗</span>
+          </div>
+
+          <div class="gallery">
+            <figure class="g-poster"><img src="__IMG_GUOJIA__" alt="「过家家」文字家居展主视觉海报" /><figcaption>「过家家」主视觉海报 · S4206 文字家居展 · 2025.6.27</figcaption></figure>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="actions"><button class="play-again">↻ 把小白鹅放回去，再抓一次</button></div>
+  </div>
+</section>
+
+<!-- ═══════ 板块 4 · 娃娃机抓兔子 → 感谢观看 ═══════ -->
+<section class="board board-s4" id="thanks" data-game>
+  <div class="bg-word">THANKS<br>BYE</div>
+  <div class="wrap">
+    <div class="board-title">
+      <p class="en" style="color:#fff">LAST <span style="color:var(--green)">DOLL</span> 🐰</p>
+      <p class="zh" style="color:rgba(255,255,255,.8)">最后一只小兔子 · 抓到它，我们的旅程就到站啦</p>
+    </div>
+
+    <div class="stage gstage" style="--cabback:#c9a6f2; --cab1:#9b6fe8; --cab2:#c9a6f2; --based:#e9dcff; --based2:#d9c6ff;">
+      <div class="scene gscene">
+        <div class="panel p-ground"></div>
+        <div class="panel p-back cabback">
+          <div class="rail3"></div>
+          <div class="claw3d">
+            <div class="cable3"></div>
+            <svg class="claw-svg" width="70" height="56" viewBox="0 0 70 56">
+              <rect x="16" y="0" width="38" height="15" rx="7.5" fill="#2a3272"/>
+              <path class="claw-arm left" d="M25 14 Q14 30 26 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+              <path class="claw-arm right" d="M45 14 Q56 30 44 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+            </svg>
+            <div class="caught-slot" tabindex="0" role="button" aria-label="查看板块内容">
+              <svg viewBox="0 0 120 130"><use class="caught-use" href="#doll-bunny"/></svg>
+            </div>
+          </div>
+          <div class="g-doll" data-sym="#doll-bunny" style="left:42%; animation-delay:.9s;"><svg viewBox="0 0 120 130"><use href="#doll-bunny"/></svg></div>
+          <div class="gpuff" style="left:4%;"></div>
+          <div class="gpuff" style="left:30%; background:#f3edff;"></div>
+          <div class="gpuff" style="left:58%;"></div>
+          <div class="gpuff" style="left:80%; background:#e2ffe0;"></div>
+        </div>
+        <div class="panel p-top"></div>
+        <div class="panel p-left"></div>
+        <div class="panel p-right"></div>
+        <div class="panel p-glass ghit"></div>
+        <div class="panel p-base-top"></div>
+        <div class="panel p-base">
+          <div class="b-joystick"><span class="stick"></span><span class="ball"></span></div>
+          <button class="b-start gdrop" aria-label="下爪抓娃娃"></button>
+          <div class="b-coin-label">COIN</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="hint" style="color:#fff">👆 点击小兔子，抓起来领取谢谢 🐰</p>
+
+    <div class="detail">
+      <div class="detail-inner">
+        <div class="detail-card thanks-card">
+          <p class="big">THANKS FOR<br><span class="lt">(</span> <span class="gd">WATCHING</span> <span class="lt">)</span></p>
+          <p>每一次抓取，都是一次相遇。谢谢你看完我的两个小作品 🎮💜</p>
+          <a class="mail-chip" href="mailto:486516958@qq.com">486516958@qq.com</a>
+          <div class="wechat-block">
+            <img src="__IMG_WECHAT__" alt="微信二维码 · 扫码添加好友" />
+            <p class="wechat-invite">邮箱可能回得慢，<b>扫码加我微信</b>更快 🐾<br />备注暗号「<b>抓娃娃</b>」，一定通过！</p>
+          </div>
+          <div class="social-row">
+            <a href="#about">回到第一台娃娃机 ↑</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions"><button class="play-again">↻ 再玩一次</button></div>
+  </div>
+</section>
+
+<footer>🎮 CLAW MACHINE PORTFOLIO · 学生作品集 · 调研数据为课程示意 · 2026</footer>
+
+<script>
+  // ===== 板块 3D 娃娃机：一机一娃，点击娃娃自动抓取 =====
+  document.querySelectorAll('.board[data-game]').forEach((sec) => {
+    const claw = sec.querySelector('.claw3d');
+    const cable = sec.querySelector('.cable3');
+    const caught = sec.querySelector('.caught-slot');
+    const doll = sec.querySelector('.g-doll');
+    const hint = sec.querySelector('.hint');
+    const detailCard = sec.querySelector('.detail-card');
+    const SCENE_W = 520;
+
+    let state = 'idle';          // idle 待抓 | drop 抓取动画中
+    let clawX = 0, targetX = 0;  // 0 = 爪子正对机柜中心
+
+    (function follow() {
+      clawX += (targetX - clawX) * 0.12;
+      claw.style.marginLeft = clawX + '%';
+      requestAnimationFrame(follow);
+    })();
+
+    function grab() {
+      if (state !== 'idle') return;
+      state = 'drop';
+      // 1) 爪子平移到娃娃正上方（爪子中心 = 机柜中心 + margin 位移）
+      const dollCenter = parseFloat(doll.style.left) / 100 * SCENE_W + 48;
+      targetX = (dollCenter - SCENE_W / 2) / SCENE_W * 100;
+      hint.innerHTML = '🎯 爪子移动中…';
+      setTimeout(() => {
+        clawX = targetX;
+        // 2) 缆绳延长，爪子一路下探到娃娃
+        cable.style.height = '218px';
+        hint.innerHTML = '⬇️ 下爪…';
+        setTimeout(() => {
+          // 3) 闭合抓住
+          claw.classList.add('shut');
+          doll.classList.add('gone');
+          claw.classList.add('caught');
+          hint.innerHTML = '🎉 抓到了！';
+          setTimeout(() => {
+            // 4) 提起娃娃
+            cable.style.height = '148px';
+            setTimeout(() => {
+              // 5) 跳转到对应内容
+              hint.innerHTML = '👇 下面就是对应的作品内容';
+              sec.classList.add('opened');
+              setTimeout(() => detailCard.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+              state = 'idle';
+            }, 1000);
+          }, 600);
+        }, 1300);
+      }, 750);
+    }
+
+    doll.addEventListener('click', grab);
+    doll.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); grab(); }
+    });
+    sec.querySelector('.gdrop').addEventListener('click', grab);
+
+    sec.querySelector('.play-again').addEventListener('click', () => {
+      if (state !== 'idle') return;
+      sec.classList.remove('opened');
+      doll.classList.remove('gone');
+      claw.classList.remove('caught', 'shut');
+      cable.style.height = '104px';
+      hint.innerHTML = '👆 点击娃娃，爪子会自动把它抓起来！';
+      setTimeout(() => sec.querySelector('.gstage').scrollIntoView({ behavior: 'smooth', block: 'center' }), 250);
+    });
+  });
+
+  // 封面 3D 交互：鼠标/触摸转动机器，静止时自动摇摆
+  const cover = document.getElementById('cover');
+  const scene = document.getElementById('scene');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (cover && scene && !reduceMotion) {
+    let targetY = -16, targetX = 10;   // 目标角度
+    let curY = -16, curX = 10;         // 当前角度
+    let lastMove = 0;
+
+    const setTarget = (clientX, clientY) => {
+      const r = cover.getBoundingClientRect();
+      const nx = Math.max(-1, Math.min(1, (clientX - r.left) / r.width * 2 - 1));
+      const ny = Math.max(-1, Math.min(1, (clientY - r.top) / r.height * 2 - 1));
+      targetY = -16 + nx * 16;
+      targetX = 10 - ny * 8;
+      lastMove = performance.now();
+    };
+
+    cover.addEventListener('mousemove', (e) => setTarget(e.clientX, e.clientY));
+    cover.addEventListener('touchmove', (e) => {
+      if (e.touches[0]) setTarget(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+    cover.addEventListener('mouseleave', () => { lastMove = 0; });
+
+    (function loop(now) {
+      const t = now / 1000;
+      if (now - lastMove > 2200) {
+        // 无人操作：自动缓慢摇摆
+        targetY = -14 + Math.sin(t * .55) * 9;
+        targetX = 10 + Math.cos(t * .4) * 2.5;
+      }
+      curY += (targetY - curY) * .06;
+      curX += (targetX - curX) * .06;
+      scene.style.transform = 'rotateX(' + curX.toFixed(2) + 'deg) rotateY(' + curY.toFixed(2) + 'deg)';
+      requestAnimationFrame(loop);
+    })(performance.now());
+  } else if (scene) {
+    scene.style.transform = 'rotateX(10deg) rotateY(-16deg)';
+  }
+
+  // 封面投币 → 硬币飞入投币口 → 平滑进入第一个板块
+  const coinBtn = document.getElementById('coin-btn');
+  const coinSlot = document.getElementById('coin-slot');
+  const coverHint = document.getElementById('cover-hint');
+
+  if (cover && coinBtn && coinSlot) {
+    coinBtn.addEventListener('click', () => {
+      if (cover.classList.contains('inserted')) return;
+      cover.classList.add('inserted');
+
+      // 计算硬币飞向投币口的位移
+      const from = coinBtn.getBoundingClientRect();
+      const to = coinSlot.getBoundingClientRect();
+      const dx = (to.left + to.width / 2) - (from.left + from.width / 2);
+      const dy = (to.top + to.height / 2) - (from.top + from.height / 2);
+
+      coinBtn.style.animation = 'none';
+      coinBtn.style.transition = 'transform .9s cubic-bezier(.45,0,.55,1), opacity .9s ease';
+      coinBtn.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(.3)';
+      coinBtn.style.opacity = '0';
+
+      setTimeout(() => {
+        coinSlot.classList.add('glow');
+        coverHint.textContent = '🪙 投币成功！游戏开始 ——';
+      }, 850);
+
+      setTimeout(() => {
+        document.getElementById('about').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 1600);
+    });
+  }
+</script>
+
+</body>
+</html>
