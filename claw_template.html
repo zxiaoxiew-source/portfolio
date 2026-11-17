@@ -292,6 +292,31 @@
     transform: scale(.92); transition: transform .25s ease;
   }
   .lightbox.open img { transform: scale(1); }
+  .lightbox img.lb-fading { opacity: .35; }
+  .lightbox img { transition: transform .25s ease, opacity .2s ease; }
+  .lightbox .lb-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(255,255,255,.92); color: #23234f;
+    font-size: 24px; font-weight: 900; cursor: pointer; border: none;
+    box-shadow: 0 6px 0 rgba(0,0,0,.25);
+    transition: transform .18s ease, background .18s ease;
+    display: grid; place-items: center; user-select: none;
+  }
+  .lightbox .lb-arrow:hover { transform: translateY(-50%) scale(1.12); background: #fff; }
+  .lightbox .lb-arrow.lb-prev { left: 22px; }
+  .lightbox .lb-arrow.lb-next { right: 22px; }
+  .lightbox .lb-count {
+    position: absolute; top: 24px; left: 26px;
+    color: rgba(255,255,255,.85); font-weight: 800; font-size: 14px;
+    background: rgba(0,0,0,.35); padding: 7px 16px; border-radius: 100px;
+    letter-spacing: .08em;
+  }
+  @media (max-width: 760px) {
+    .lightbox .lb-arrow { width: 44px; height: 44px; font-size: 18px; }
+    .lightbox .lb-arrow.lb-prev { left: 10px; }
+    .lightbox .lb-arrow.lb-next { right: 10px; }
+  }
   .lightbox .lb-close {
     position: absolute; top: 20px; right: 26px;
     width: 46px; height: 46px; border-radius: 50%;
@@ -1078,7 +1103,7 @@
       </div>
     </div>
 
-    <p class="hint">👆 点击小鲸鱼，抓起来打开作品一 🐳</p>
+    <p class="hint">👆 点击小狐狸，抓起来打开作品一 🦊</p>
 
     <div class="detail">
       <div class="detail-inner">
@@ -1629,20 +1654,40 @@
     });
   }
 
-  // ===== 图片灯箱：点击任意作品图放大查看 =====
+  // ===== 图片灯箱：点击任意作品图放大查看，支持左右切换 =====
   const lb = document.createElement('div');
   lb.className = 'lightbox';
-  lb.innerHTML = '<button class="lb-close" aria-label="关闭放大视图">✕</button><img alt="作品大图" /><span class="lb-tip">点击空白处或 ✕ 关闭 · ESC 也行</span>';
+  lb.innerHTML = '<button class="lb-close" aria-label="关闭放大视图">✕</button><span class="lb-count"></span><button class="lb-arrow lb-prev" aria-label="上一张">←</button><img alt="作品大图" /><button class="lb-arrow lb-next" aria-label="下一张">→</button><span class="lb-tip">← → 切换 · 点击空白处或 ESC 关闭</span>';
   document.body.appendChild(lb);
   const lbImg = lb.querySelector('img');
+  const lbCount = lb.querySelector('.lb-count');
+  const lbImgs = Array.from(document.querySelectorAll('.gallery img, .myth-scrolls img, .myth-wide img, .coral-scrolls img, .g-poster img'));
+  let lbIdx = 0;
+  function showLb(i) {
+    lbIdx = (i + lbImgs.length) % lbImgs.length;
+    const src = lbImgs[lbIdx].src, alt = lbImgs[lbIdx].alt;
+    lbImg.classList.add('lb-fading');
+    lbImg.onload = () => lbImg.classList.remove('lb-fading');
+    lbImg.src = src;
+    lbImg.alt = alt;
+    lbCount.textContent = (lbIdx + 1) + ' / ' + lbImgs.length;
+  }
   function closeLb() { lb.classList.remove('open'); document.body.style.overflow = ''; }
-  lb.addEventListener('click', (e) => { if (e.target === lb || e.target.classList.contains('lb-close')) closeLb(); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLb(); });
-  document.querySelectorAll('.gallery img, .myth-scrolls img, .myth-wide img, .coral-scrolls img, .g-poster img').forEach((img) => {
+  lb.querySelector('.lb-prev').addEventListener('click', () => showLb(lbIdx - 1));
+  lb.querySelector('.lb-next').addEventListener('click', () => showLb(lbIdx + 1));
+  lb.addEventListener('click', (e) => {
+    if (e.target === lb || e.target.classList.contains('lb-close') || e.target.classList.contains('lb-tip')) closeLb();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLb();
+    if (e.key === 'ArrowLeft') showLb(lbIdx - 1);
+    if (e.key === 'ArrowRight') showLb(lbIdx + 1);
+  });
+  lbImgs.forEach((img, i) => {
     img.addEventListener('click', (e) => {
       e.stopPropagation();
-      lbImg.src = img.src;
-      lbImg.alt = img.alt;
+      showLb(i);
       lb.classList.add('open');
       document.body.style.overflow = 'hidden';
     });
