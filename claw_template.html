@@ -71,6 +71,7 @@
   .board-s3 .bg-word { color: rgba(255,201,60,.35); }
   .board-s4 { background: linear-gradient(180deg, #c9a6f2, #9b6fe8); }
   .board-s4 .bg-word { color: rgba(255,255,255,.18); }
+  .board-s4 .detail-card { margin-top: 0; }
   .board-s5 { background: #e3f4ea; }
   .board-s5 .bg-word { color: rgba(125,201,154,.32); }
 
@@ -1147,72 +1148,20 @@
 </section>
 
 <!-- ═══════ 板块 4 · 娃娃机抓兔子 → 感谢观看 ═══════ -->
-<section class="board board-s4" id="thanks" data-game>
-  <div class="bg-word">THANKS<br>BYE</div>
+<section class="board board-s4" id="thanks">
   <div class="wrap">
-    <div class="board-title">
-      <p class="en" style="color:#fff">LAST <span style="color:var(--green)">DOLL</span> 🐰</p>
-      <p class="zh" style="color:rgba(255,255,255,.8)">最后一只小兔子 · 抓到它，我们的旅程就到站啦</p>
-    </div>
-
-    <div class="stage gstage" style="--cabback:#c9a6f2; --cab1:#9b6fe8; --cab2:#c9a6f2; --based:#e9dcff; --based2:#d9c6ff;">
-      <div class="scene gscene">
-        <div class="panel p-ground"></div>
-        <div class="panel p-back cabback">
-          <div class="rail3"></div>
-        </div>
-        <div class="front3">
-          <div class="rail3"></div>
-          <div class="claw3d">
-            <div class="cable3"></div>
-            <svg class="claw-svg" width="84" height="66" viewBox="0 0 70 56">
-              <rect x="16" y="0" width="38" height="15" rx="7.5" fill="#2a3272"/>
-              <path class="claw-arm left" d="M25 14 Q14 30 26 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
-              <path class="claw-arm right" d="M45 14 Q56 30 44 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
-            </svg>
-            <div class="caught-slot" tabindex="0" role="button" aria-label="查看板块内容">
-              <svg viewBox="0 0 120 130"><use class="caught-use" href="#doll-bunny"/></svg>
-            </div>
-          </div>
-          <div class="g-doll" data-sym="#doll-bunny" style="left:35.8%; animation-delay:.9s;"><svg viewBox="0 0 120 130"><use href="#doll-bunny"/></svg></div>
-          <div class="gpuff" style="left:4%;"></div>
-          <div class="gpuff" style="left:30%; background:#f3edff;"></div>
-          <div class="gpuff" style="left:58%;"></div>
-          <div class="gpuff" style="left:80%; background:#e2ffe0;"></div>
-        </div>
-        <div class="panel p-top"></div>
-        <div class="panel p-left"></div>
-        <div class="panel p-right"></div>
-        <div class="panel p-glass ghit"></div>
-        <div class="panel p-base-top"></div>
-        <div class="panel p-base">
-          <div class="b-joystick"><span class="stick"></span><span class="ball"></span></div>
-          <button class="b-start gdrop" aria-label="下爪抓娃娃"></button>
-          <div class="b-coin-label">COIN</div>
-        </div>
+    <div class="detail-card thanks-card">
+      <p class="big">THANKS FOR<br><span class="lt">(</span> <span class="gd">WATCHING</span> <span class="lt">)</span></p>
+      <p>每一次抓取，都是一次相遇。谢谢你看完我的两个小作品 🎮💜</p>
+      <a class="mail-chip" href="mailto:486516958@qq.com">486516958@qq.com</a>
+      <div class="wechat-block">
+        <img src="__IMG_WECHAT__" alt="微信二维码 · 扫码添加好友" />
+        <p class="wechat-invite">邮箱可能回得慢，<b>扫码加我微信</b>更快 🐾<br />备注暗号「<b>抓娃娃</b>」，一定通过！</p>
+      </div>
+      <div class="social-row">
+        <a href="#about">回到第一台娃娃机 ↑</a>
       </div>
     </div>
-
-    <p class="hint" style="color:#fff">👆 点击小兔子，抓起来领取谢谢 🐰</p>
-
-    <div class="detail">
-      <div class="detail-inner">
-        <div class="detail-card thanks-card">
-          <p class="big">THANKS FOR<br><span class="lt">(</span> <span class="gd">WATCHING</span> <span class="lt">)</span></p>
-          <p>每一次抓取，都是一次相遇。谢谢你看完我的两个小作品 🎮💜</p>
-          <a class="mail-chip" href="mailto:486516958@qq.com">486516958@qq.com</a>
-          <div class="wechat-block">
-            <img src="__IMG_WECHAT__" alt="微信二维码 · 扫码添加好友" />
-            <p class="wechat-invite">邮箱可能回得慢，<b>扫码加我微信</b>更快 🐾<br />备注暗号「<b>抓娃娃</b>」，一定通过！</p>
-          </div>
-          <div class="social-row">
-            <a href="#about">回到第一台娃娃机 ↑</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="actions"><button class="play-again">↻ 再玩一次</button></div>
   </div>
 </section>
 
