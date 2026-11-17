@@ -77,6 +77,22 @@
   .board-s6 .bg-word { color: rgba(138,90,31,.15); }
   .board-s6 .hint { background: rgba(255,255,255,.9); color: #7a531f !important; }
   .board-s6 .detail-card { margin-top: 0; }
+  .board-s7 { background: linear-gradient(180deg, #cfeaff, #5ba8f5); }
+  .board-s7 .bg-word { color: rgba(255,255,255,.4); }
+  .board-s7 .hint { background: rgba(255,255,255,.9); color: #1f5f8f !important; }
+  .board-s7 .detail-card { margin-top: 0; }
+  .coral-scrolls { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 6px 0 22px; }
+  .coral-scrolls figure {
+    margin: 0; background: #f2faff; padding: 10px 10px 12px;
+    border-radius: 10px; box-shadow: 0 8px 18px -8px rgba(20,70,110,.45);
+    transition: transform .25s ease;
+  }
+  .coral-scrolls figure:nth-child(odd) { transform: rotate(-1.2deg); }
+  .coral-scrolls figure:nth-child(even) { transform: rotate(1.2deg); }
+  .coral-scrolls figure:hover { transform: rotate(0) scale(1.02); position: relative; z-index: 2; }
+  .coral-scrolls img { width: 100%; display: block; border-radius: 6px; }
+  .coral-scrolls figcaption { margin-top: 9px; font-weight: 700; font-size: 13px; color: #1f5f8f; text-align: center; }
+  @media (max-width: 760px) { .coral-scrolls { grid-template-columns: 1fr; } }
 
   /* 神话概念图 · 横竖卷轴分展 */
   .myth-scrolls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 6px 0 22px; }
@@ -800,6 +816,24 @@
       <ellipse cx="60" cy="82" rx="4.5" ry="3" fill="#ff9f8f"/>
     </symbol>
 
+    <!-- 橙色小狐狸 -->
+    <symbol id="doll-fox" viewBox="0 0 120 130">
+      <path d="M24 52 L32 12 L56 40 Z" fill="#f2925c"/>
+      <path d="M31 38 L34 20 L46 32 Z" fill="#fff4e8"/>
+      <path d="M96 52 L88 12 L64 40 Z" fill="#f2925c"/>
+      <path d="M89 38 L86 20 L74 32 Z" fill="#fff4e8"/>
+      <ellipse cx="60" cy="78" rx="45" ry="42" fill="#f2925c"/>
+      <ellipse cx="33" cy="86" rx="15" ry="13" fill="#fff4e8"/>
+      <ellipse cx="87" cy="86" rx="15" ry="13" fill="#fff4e8"/>
+      <ellipse cx="60" cy="88" rx="19" ry="15" fill="#fff4e8"/>
+      <ellipse cx="42" cy="64" rx="4.5" ry="7" fill="#4a3413"/>
+      <ellipse cx="78" cy="64" rx="4.5" ry="7" fill="#4a3413"/>
+      <circle cx="30" cy="80" r="6" fill="#ff8a7a" opacity=".8"/>
+      <circle cx="90" cy="80" r="6" fill="#ff8a7a" opacity=".8"/>
+      <circle cx="60" cy="82" r="5" fill="#4a3413"/>
+      <path d="M52 90 Q56 95 60 90 Q64 95 68 90" stroke="#4a3413" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    </symbol>
+
     <!-- 米白色小白鹅 -->
     <symbol id="doll-goose" viewBox="0 0 120 130">
       <ellipse cx="60" cy="80" rx="45" ry="42" fill="#f6efdd"/>
@@ -829,10 +863,11 @@
   <span class="logo">🎮 claw portfolio</span>
   <nav>
     <a href="#about">About 🦖</a>
-    <a href="#fridge">作品① 🐳</a>
+    <a href="#fridge">作品① 🦊</a>
     <a href="#mat">作品② ⭐</a>
     <a href="#guojia">作品③ 🪿</a>
     <a href="#myth">神话 🐻</a>
+    <a href="#coral">WORK 05 🐳</a>
     <a href="#thanks">Thanks 🐰</a>
   </nav>
 </header>
@@ -845,7 +880,7 @@
     <div class="cover-copy">
       <p class="cover-kicker">🎮 ZHANG XINYAN · 2026</p>
       <h1 class="cover-title">作品集</h1>
-      <p class="cover-sub">一台娃娃机 · 四个娃娃 · 两个小作品</p>
+      <p class="cover-sub">一台娃娃机 · 六个娃娃 · 五个小作品</p>
       <p class="cover-hint" id="cover-hint">🖱️ 移动鼠标转动机器 · 点击硬币投币开始</p>
     </div>
 
@@ -969,11 +1004,11 @@
   <div class="bg-word">WORK<br>NO.01</div>
   <div class="wrap">
     <div class="board-title">
-      <p class="en">WORK <span style="color:var(--blue)">01</span> 🐳</p>
-      <p class="zh">爪子捞上来一条小鲸鱼 · 它背着我第一个作品：轻量化冰箱食材台账</p>
+      <p class="en">WORK <span style="color:var(--blue)">01</span> 🦊</p>
+      <p class="zh">爪子捞上来一只小狐狸 · 它叼着我第一个作品：轻量化冰箱食材台账</p>
     </div>
 
-    <div class="stage gstage" style="--cabback:#bfe0ff; --cab1:#5ba8f5; --cab2:#8fd0ff; --based:#eaf4ff; --based2:#dcecff;">
+    <div class="stage gstage" style="--cabback:#ffd9b0; --cab1:#ff9a4d; --cab2:#ffc98a; --based:#fff6ec; --based2:#ffedd8;">
       <div class="scene gscene">
         <div class="panel p-ground"></div>
         <div class="panel p-back cabback">
@@ -989,14 +1024,14 @@
               <path class="claw-arm right" d="M45 14 Q56 30 44 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
             </svg>
             <div class="caught-slot" tabindex="0" role="button" aria-label="查看板块内容">
-              <svg viewBox="0 0 120 130"><use class="caught-use" href="#doll-whale"/></svg>
+              <svg viewBox="0 0 120 130"><use class="caught-use" href="#doll-fox"/></svg>
             </div>
           </div>
-          <div class="g-doll" data-sym="#doll-whale" style="left:35.8%; animation-delay:.9s;"><svg viewBox="0 0 120 130"><use href="#doll-whale"/></svg></div>
+          <div class="g-doll" data-sym="#doll-fox" style="left:35.8%; animation-delay:.9s;"><svg viewBox="0 0 120 130"><use href="#doll-fox"/></svg></div>
           <div class="gpuff" style="left:4%;"></div>
-          <div class="gpuff" style="left:30%; background:#eef4ff;"></div>
+          <div class="gpuff" style="left:30%; background:#fff1e0;"></div>
           <div class="gpuff" style="left:58%;"></div>
-          <div class="gpuff" style="left:80%; background:#ffeef5;"></div>
+          <div class="gpuff" style="left:80%; background:#ffe9d6;"></div>
         </div>
         <div class="panel p-top"></div>
         <div class="panel p-left"></div>
@@ -1202,7 +1237,7 @@
   <div class="bg-word">神话<br>创世</div>
   <div class="wrap">
     <div class="board-title">
-      <p class="en" style="color:#8a5a1f">AI × <span style="color:#b03a2e">华夏神话</span> 🐻</p>
+      <p class="en" style="color:#8a5a1f">WORK <span style="color:#b03a2e">04</span> 🐻</p>
       <p class="zh" style="color:rgba(90,60,20,.78)">抓一只小熊，翻开 AI 笔下的东方创世纪</p>
     </div>
 
@@ -1275,6 +1310,75 @@
     </div>
 
     <div class="actions"><button class="play-again">↻ 把小熊放回去，再抓一次</button></div>
+  </div>
+</section>
+
+<!-- ═══════ 作品⑤ · 小鲸鱼 → 冷水珊瑚信息图谱 ═══════ -->
+<section class="board board-s7" id="coral" data-game>
+  <div class="bg-word">深海<br>枯荣</div>
+  <div class="wrap">
+    <div class="board-title">
+      <p class="en" style="color:#1f5f8f">WORK <span style="color:#2b9fd8">05</span> 🐳</p>
+      <p class="zh" style="color:rgba(20,70,110,.78)">骑上小鲸鱼，潜入冷水珊瑚的亿万年深海叙事</p>
+    </div>
+
+    <div class="stage gstage" style="--cabback:#bfe3f5; --cab1:#5ba8f5; --cab2:#8fd0ff; --based:#eaf6ff; --based2:#dceeff;">
+      <div class="scene gscene">
+        <div class="panel p-ground"></div>
+        <div class="panel p-back cabback">
+          <div class="rail3"></div>
+        </div>
+        <div class="front3">
+          <div class="rail3"></div>
+          <div class="claw3d">
+            <div class="cable3"></div>
+            <svg class="claw-svg" width="84" height="66" viewBox="0 0 70 56">
+              <rect x="16" y="0" width="38" height="15" rx="7.5" fill="#2a3272"/>
+              <path class="claw-arm left" d="M25 14 Q14 30 26 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+              <path class="claw-arm right" d="M45 14 Q56 30 44 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+            </svg>
+            <div class="caught-slot" tabindex="0" role="button" aria-label="查看冷水珊瑚图谱">
+              <svg viewBox="0 0 120 130"><use class="caught-use" href="#doll-whale"/></svg>
+            </div>
+          </div>
+          <div class="g-doll" data-sym="#doll-whale" style="left:35.8%; animation-delay:.9s;"><svg viewBox="0 0 120 130"><use href="#doll-whale"/></svg></div>
+          <div class="gpuff" style="left:4%;"></div>
+          <div class="gpuff" style="left:30%; background:#e8f6ff;"></div>
+          <div class="gpuff" style="left:58%;"></div>
+          <div class="gpuff" style="left:80%; background:#dff0ff;"></div>
+        </div>
+        <div class="panel p-top"></div>
+        <div class="panel p-left"></div>
+        <div class="panel p-right"></div>
+        <div class="panel p-glass ghit"></div>
+        <div class="panel p-base-top"></div>
+        <div class="panel p-base">
+          <div class="b-joystick"><span class="stick"></span><span class="ball"></span></div>
+          <button class="b-start gdrop" aria-label="下爪抓娃娃"></button>
+          <div class="b-coin-label">COIN</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="hint" style="color:#1f5f8f">🖱️ 移动瞄准 · 点击小鲸鱼 🐳 展开深海图谱</p>
+
+    <div class="detail">
+      <div class="detail-inner">
+        <div class="detail-card">
+          <h3>《深海枯荣》 · 冷水珊瑚群落演化与价值信息图谱</h3>
+          <p>以「枯荣」为题——珊瑚是深海的建筑师，也是时间的记录者。两张长卷图谱，从地质年代表一路走到生态功能网络：71 种冷水珊瑚的家族档案、群落演化的时间年轮，以及它们在黑暗深海里悄悄维系的碳循环。慢慢向下滑，潜入这场亿万年的深海叙事。</p>
+
+          <p class="myth-head" style="color:#1f5f8f">— 长 卷 · 双 屏 联 展 —</p>
+          <div class="seal-row"><span class="seal" style="background:#2b7fb8">群落演化</span><span class="seal" style="background:#2b7fb8">生命循环</span><span class="seal" style="background:#2b7fb8">生态价值</span><span class="seal" style="background:#2b7fb8">深海档案</span></div>
+          <div class="coral-scrolls">
+            <figure><img src="__IMG_CORAL1__" alt="冷水珊瑚群落演化图谱" /><figcaption>《深海枯荣 · 群落卷》从珊瑚礁的类型与形成，到共生、结构与演化——一片珊瑚林的完整一生</figcaption></figure>
+            <figure><img src="__IMG_CORAL2__" alt="冷水珊瑚价值信息图谱" /><figcaption>《深海枯荣 · 价值卷》地源时间线、应用价值图表与 71 种冷水珊瑚分类——深海资源的藏宝图</figcaption></figure>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions"><button class="play-again">↻ 把小鲸鱼放回深海，再抓一次</button></div>
   </div>
 </section>
 
