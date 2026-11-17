@@ -420,14 +420,33 @@
     box-shadow: 0 4px 0 rgba(35,35,79,.18);
   }
   .wechat-block { margin-top: 26px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
-  .wechat-block img {
-    width: min(230px, 62vw);
+  .qr-placeholder {
+    width: min(230px, 62vw); aspect-ratio: 1;
     background: #fff; border-radius: 18px; padding: 10px;
     box-shadow: 0 10px 24px -10px rgba(35,35,79,.4);
     transform: rotate(1.5deg);
     transition: transform .25s ease;
+    display: grid; place-items: center;
+    border: 3px dashed var(--green);
   }
-  .wechat-block img:hover { transform: rotate(0deg) scale(1.03); }
+  .qr-placeholder:hover { transform: rotate(0deg) scale(1.03); }
+  .qr-placeholder .qr-face {
+    width: 100%; height: 100%; border-radius: 12px;
+    background:
+      repeating-linear-gradient(0deg, #f0f7f2 0 12px, #fff 12px 24px),
+      repeating-linear-gradient(90deg, rgba(61,155,118,.08) 0 12px, transparent 12px 24px);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  }
+  .qr-placeholder .qr-face .qr-icon {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: var(--green); color: #fff;
+    display: grid; place-items: center; font-size: 30px;
+    box-shadow: 0 6px 0 rgba(35,35,79,.15);
+  }
+  .qr-placeholder .qr-face .qr-word {
+    font-weight: 900; font-size: 15px; color: #3d9b76; letter-spacing: .06em;
+    text-align: center; line-height: 1.5;
+  }
   .wechat-invite { color: rgba(255,255,255,.92); font-weight: 700; font-size: 14.5px; margin: 0; text-shadow: 0 1px 3px rgba(35,35,79,.25); }
   .wechat-invite b { color: var(--green); }
 
@@ -1202,8 +1221,13 @@
           <p>每一次抓取，都是一次相遇。谢谢你看完我的两个小作品 🎮💜</p>
           <a class="mail-chip" href="mailto:486516958@qq.com">486516958@qq.com</a>
           <div class="wechat-block">
-            <img src="__IMG_WECHAT__" alt="微信二维码 · 扫码添加好友" />
-            <p class="wechat-invite">邮箱可能回得慢，<b>扫码加我微信</b>更快 🐾<br />备注暗号「<b>抓娃娃</b>」，一定通过！</p>
+            <div class="qr-placeholder">
+              <div class="qr-face">
+                <span class="qr-icon">🐾</span>
+                <span class="qr-word">微信二维码<br />扫码见私发</span>
+              </div>
+            </div>
+            <p class="wechat-invite">想加我微信？<b>私聊我发二维码</b> 🐾<br />备注暗号「<b>抓娃娃</b>」，一定通过！</p>
           </div>
           <div class="social-row">
             <a href="#about">回到第一台娃娃机 ↑</a>
