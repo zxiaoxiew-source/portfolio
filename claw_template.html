@@ -304,7 +304,7 @@
   .gscene .claw3d.shut .claw-arm.left { transform: rotate(-15deg); }
   .gscene .claw3d.shut .claw-arm.right { transform: rotate(15deg); }
   .gscene .cable3 { height: 104px; }
-  .cable3 { transition: height .7s cubic-bezier(.5,0,.3,1); }
+  .cable3 { transition: height .5s cubic-bezier(.5,0,.3,1); }
 
   /* 前层平面：爪子、娃娃、云堆都悬在背板前方，视觉更大 */
   .front3 {
@@ -785,10 +785,10 @@
 
     <!-- 卡其色小熊 -->
     <symbol id="doll-bear" viewBox="0 0 120 130">
-      <circle cx="30" cy="26" r="13" fill="#c8a76a"/>
-      <circle cx="30" cy="26" r="6" fill="#efe0be"/>
-      <circle cx="90" cy="26" r="13" fill="#c8a76a"/>
-      <circle cx="90" cy="26" r="6" fill="#efe0be"/>
+      <circle cx="29" cy="38" r="15" fill="#c8a76a"/>
+      <circle cx="29" cy="38" r="7" fill="#efe0be"/>
+      <circle cx="91" cy="38" r="15" fill="#c8a76a"/>
+      <circle cx="91" cy="38" r="7" fill="#efe0be"/>
       <ellipse cx="60" cy="88" rx="44" ry="40" fill="#c8a76a"/>
       <ellipse cx="60" cy="102" rx="25" ry="18" fill="#efe0be"/>
       <ellipse cx="16" cy="96" rx="11" ry="9" fill="#c8a76a"/>
@@ -1365,7 +1365,7 @@
     let clawX = 0, targetX = 0;  // 0 = 爪子正对机柜中心
 
     (function follow() {
-      clawX += (targetX - clawX) * 0.22;
+      clawX += (targetX - clawX) * 0.35;
       claw.style.marginLeft = clawX + '%';
       requestAnimationFrame(follow);
     })();
@@ -1395,12 +1395,12 @@
               // 5) 跳转到对应内容
               hint.innerHTML = '👇 下面就是对应的作品内容';
               sec.classList.add('opened');
-              setTimeout(() => detailCard.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+              setTimeout(() => detailCard.scrollIntoView({ behavior: 'smooth', block: 'center' }), 250);
               state = 'idle';
-            }, 650);
-          }, 380);
-        }, 850);
-      }, 420);
+            }, 420);
+          }, 250);
+        }, 560);
+      }, 200);
     }
 
     doll.addEventListener('click', grab);
