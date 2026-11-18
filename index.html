@@ -695,28 +695,48 @@
   }
   .b-coin-label::before { content: "▮"; font-size: 14px; }
 
-  /* 机器里的娃娃（billboard，分层深度 · 点击即目录跳转） */
+  /* 机器里的娃娃（3D 立体：正面 + 厚度层 + 缓慢转向） */
   .doll3d {
     position: absolute; pointer-events: auto; cursor: pointer;
-    animation: dollbob 3.4s ease-in-out infinite;
+    transform-style: preserve-3d;
     -webkit-tap-highlight-color: transparent;
   }
-  .doll3d svg {
-    width: 100%; display: block; filter: drop-shadow(0 10px 10px rgba(35,35,79,.18));
+  .d3wrap { position: relative; transform-style: preserve-3d; animation: dollbob3d 4.6s ease-in-out infinite; }
+  @keyframes dollbob3d {
+    0%,100% { transform: translateY(0) rotateY(7deg); }
+    50%     { transform: translateY(-9px) rotateY(-7deg); }
+  }
+  @keyframes dollbob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+  .d3wrap svg { width: 100%; display: block; }
+  .d-back {
+    position: absolute; inset: 0;
+    transform: translateZ(-18px) scale(1.03);
+    filter: brightness(.68) saturate(.85);
+  }
+  .d-front {
+    position: relative;
+    filter: drop-shadow(0 10px 10px rgba(35,35,79,.18));
     transition: transform .25s ease, filter .25s ease;
   }
-  .doll3d:hover { animation-play-state: paused; }
-  .doll3d:hover svg { transform: scale(1.14); filter: drop-shadow(0 16px 16px rgba(35,35,79,.3)) brightness(1.06); }
-  @keyframes dollbob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+  .doll3d:hover .d3wrap { animation-play-state: paused; }
+  .doll3d:hover .d-front { transform: scale(1.14); filter: drop-shadow(0 16px 16px rgba(35,35,79,.3)) brightness(1.06); }
   /* 前排五个：错落摆放 */
   .d-dino  { left: 8px;   top: 318px; width: 106px; transform: translateZ(-118px); }
-  .d-fox   { left: 106px; top: 332px; width: 100px; transform: translateZ(-100px); animation-delay: .3s; }
-  .d-bunny { left: 198px; top: 322px; width: 98px;  transform: translateZ(-116px); animation-delay: 1.6s; }
-  .d-goose { left: 296px; top: 334px; width: 100px; transform: translateZ(-98px);  animation-delay: .9s; }
-  .d-bear  { left: 392px; top: 320px; width: 108px; transform: translateZ(-120px); animation-delay: 1.2s; }
+  .d-fox   { left: 106px; top: 332px; width: 100px; transform: translateZ(-100px); }
+  .d-bunny { left: 198px; top: 322px; width: 98px;  transform: translateZ(-116px); }
+  .d-goose { left: 296px; top: 334px; width: 100px; transform: translateZ(-98px); }
+  .d-bear  { left: 392px; top: 320px; width: 108px; transform: translateZ(-120px); }
   /* 后排两个：垫在前排间隙上方 */
-  .d-whale { left: 58px;  top: 286px; width: 104px; transform: translateZ(-170px); animation-delay: .6s; }
-  .d-star  { left: 246px; top: 280px; width: 94px;  transform: translateZ(-188px); animation-delay: 1.1s; }
+  .d-whale { left: 58px;  top: 286px; width: 104px; transform: translateZ(-170px); }
+  .d-star  { left: 246px; top: 280px; width: 94px;  transform: translateZ(-188px); }
+  /* 各娃摆动错拍 */
+  .d-dino .d3wrap  { animation-delay: 0s; }
+  .d-fox .d3wrap   { animation-delay: .3s; }
+  .d-bunny .d3wrap { animation-delay: 1.6s; }
+  .d-goose .d3wrap { animation-delay: .9s; }
+  .d-bear .d3wrap  { animation-delay: 1.2s; }
+  .d-whale .d3wrap { animation-delay: .6s; }
+  .d-star .d3wrap  { animation-delay: 1.1s; }
 
   /* 右侧创意进度条：爪子沿轨道下滑，抓住当前板块 */
   .rail-nav {
@@ -844,6 +864,25 @@
 </style>
 </head>
 <body>
+
+<!-- 右侧创意进度条：小爪子沿糖果轨道滑向当前板块 -->
+<nav class="rail-nav" id="railnav" aria-label="页面进度导航">
+  <div class="rail-track">
+    <span class="rail-fill"></span>
+    <svg class="rail-claw" width="24" height="20" viewBox="0 0 70 56" aria-hidden="true">
+      <rect x="16" y="0" width="38" height="15" rx="7.5" fill="#2a3272"/>
+      <path d="M25 14 Q14 30 26 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M45 14 Q56 30 44 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <button class="rail-dot" data-target="#about"  style="--c:#ffd93d"><span class="rail-tip">个人简介</span>🦖</button>
+  <button class="rail-dot" data-target="#fridge" style="--c:#ffab5c"><span class="rail-tip">作品① 冰箱台账</span>🦊</button>
+  <button class="rail-dot" data-target="#mat"    style="--c:#8fd0ff"><span class="rail-tip">作品② 感应地毯</span>⭐</button>
+  <button class="rail-dot" data-target="#guojia" style="--c:#a8e6a1"><span class="rail-tip">作品③ 过家家</span>🪿</button>
+  <button class="rail-dot" data-target="#myth"   style="--c:#e7cf96"><span class="rail-tip">作品④ 神话画卷</span>🐻</button>
+  <button class="rail-dot" data-target="#coral"  style="--c:#5ba8f5"><span class="rail-tip">作品⑤ 深海枯荣</span>🐳</button>
+  <button class="rail-dot" data-target="#thanks" style="--c:#ffb0d8"><span class="rail-tip">联系我</span>🐰</button>
+</nav>
 
 <!-- ═══════ 娃娃 SVG 符号库 ═══════ -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -1009,13 +1048,13 @@
         <div class="panel p-left"></div>
         <div class="panel p-right"></div>
 
-        <div class="doll3d d-dino" data-target="#about" title="个人简介 🦖"><svg viewBox="0 0 120 130"><use href="#doll-dino"/></svg></div>
-        <div class="doll3d d-fox" data-target="#fridge" title="作品① 冰箱食材台账 🦊"><svg viewBox="0 0 120 130"><use href="#doll-fox"/></svg></div>
-        <div class="doll3d d-star" data-target="#mat" title="作品② ⭐"><svg viewBox="0 0 120 130"><use href="#doll-star"/></svg></div>
-        <div class="doll3d d-goose" data-target="#guojia" title="作品③ 过家家 🪿"><svg viewBox="0 0 120 130"><use href="#doll-goose"/></svg></div>
-        <div class="doll3d d-bear" data-target="#myth" title="作品④ 神话画卷 🐻"><svg viewBox="0 0 120 130"><use href="#doll-bear"/></svg></div>
-        <div class="doll3d d-whale" data-target="#coral" title="作品⑤ 深海枯荣 🐳"><svg viewBox="0 0 120 130"><use href="#doll-whale"/></svg></div>
-        <div class="doll3d d-bunny" data-target="#thanks" title="联系我 🐰"><svg viewBox="0 0 120 130"><use href="#doll-bunny"/></svg></div>
+        <div class="doll3d d-dino" data-target="#about" title="个人简介 🦖"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-dino"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-dino"/></svg></div></div>
+        <div class="doll3d d-fox" data-target="#fridge" title="作品① 冰箱食材台账 🦊"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-fox"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-fox"/></svg></div></div>
+        <div class="doll3d d-star" data-target="#mat" title="作品② 感应地毯 ⭐"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-star"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-star"/></svg></div></div>
+        <div class="doll3d d-goose" data-target="#guojia" title="作品③ 过家家 🪿"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-goose"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-goose"/></svg></div></div>
+        <div class="doll3d d-bear" data-target="#myth" title="作品④ 神话画卷 🐻"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-bear"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-bear"/></svg></div></div>
+        <div class="doll3d d-whale" data-target="#coral" title="作品⑤ 深海枯荣 🐳"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-whale"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-whale"/></svg></div></div>
+        <div class="doll3d d-bunny" data-target="#thanks" title="联系我 🐰"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-bunny"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-bunny"/></svg></div></div>
         <div class="puff3d pf1"></div><div class="puff3d pf2"></div><div class="puff3d pf3"></div>
         <div class="puff3d pf4"></div><div class="puff3d pf5"></div><div class="puff3d pf6"></div>
 
@@ -1790,23 +1829,5 @@
     railUpdate();
 </script>
 
-<!-- 右侧创意进度条：小爪子沿糖果轨道滑向当前板块 -->
-<nav class="rail-nav" id="railnav" aria-label="页面进度导航">
-  <div class="rail-track">
-    <span class="rail-fill"></span>
-    <svg class="rail-claw" width="24" height="20" viewBox="0 0 70 56" aria-hidden="true">
-      <rect x="16" y="0" width="38" height="15" rx="7.5" fill="#2a3272"/>
-      <path d="M25 14 Q14 30 26 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
-      <path d="M45 14 Q56 30 44 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
-    </svg>
-  </div>
-  <button class="rail-dot" data-target="#about"  style="--c:#ffd93d"><span class="rail-tip">个人简介</span>🦖</button>
-  <button class="rail-dot" data-target="#fridge" style="--c:#ffab5c"><span class="rail-tip">作品① 冰箱台账</span>🦊</button>
-  <button class="rail-dot" data-target="#mat"    style="--c:#8fd0ff"><span class="rail-tip">作品②</span>⭐</button>
-  <button class="rail-dot" data-target="#guojia" style="--c:#a8e6a1"><span class="rail-tip">作品③ 过家家</span>🪿</button>
-  <button class="rail-dot" data-target="#myth"   style="--c:#e7cf96"><span class="rail-tip">作品④ 神话画卷</span>🐻</button>
-  <button class="rail-dot" data-target="#coral"  style="--c:#5ba8f5"><span class="rail-tip">作品⑤ 深海枯荣</span>🐳</button>
-  <button class="rail-dot" data-target="#thanks" style="--c:#ffb0d8"><span class="rail-tip">联系我</span>🐰</button>
-</nav>
 </body>
 </html>
