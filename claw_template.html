@@ -93,6 +93,23 @@
   .coral-scrolls img { width: 100%; display: block; border-radius: 6px; }
   .coral-scrolls figcaption { margin-top: 9px; font-weight: 700; font-size: 13px; color: #1f5f8f; text-align: center; }
   @media (max-width: 760px) { .coral-scrolls { grid-template-columns: 1fr; } }
+  .board-s8 { background: linear-gradient(180deg, #ffe9ee, #f7b8c8); }
+  .board-s8 .bg-word { color: rgba(255,255,255,.42); }
+  .board-s8 .hint { background: rgba(255,255,255,.9); color: #a04a5e !important; }
+  .board-s8 .detail-card { margin-top: 0; }
+  .ixd-scrolls { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 6px 0 22px; }
+  .ixd-scrolls figure {
+    margin: 0; background: #fff7f9; padding: 10px 10px 12px;
+    border-radius: 10px; box-shadow: 0 8px 18px -8px rgba(150,60,90,.4);
+    transition: transform .25s ease;
+  }
+  .ixd-scrolls figure:nth-child(odd) { transform: rotate(-1.2deg); }
+  .ixd-scrolls figure:nth-child(even) { transform: rotate(1.2deg); }
+  .ixd-scrolls figure:hover { transform: rotate(0) scale(1.02); position: relative; z-index: 2; }
+  .ixd-scrolls img { width: 100%; display: block; border-radius: 6px; }
+  .ixd-scrolls figcaption { margin-top: 9px; font-weight: 700; font-size: 12.5px; color: #a04a5e; text-align: center; }
+  @media (max-width: 900px) { .ixd-scrolls { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 640px) { .ixd-scrolls { grid-template-columns: 1fr; } }
 
   /* 神话概念图 · 横竖卷轴分展 */
   .myth-scrolls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 6px 0 22px; }
@@ -276,7 +293,7 @@
 
   .actions { text-align: center; margin-top: 26px; position: relative; z-index: 2; }
   /* 图片灯箱：点击放大查看 */
-  .gallery img, .myth-scrolls img, .myth-wide img, .coral-scrolls img, .g-poster img { cursor: zoom-in; }
+  .gallery img, .myth-scrolls img, .myth-wide img, .coral-scrolls img, .ixd-scrolls img, .g-poster img { cursor: zoom-in; }
   .lightbox {
     position: fixed; inset: 0; z-index: 999;
     background: rgba(18,18,46,.88);
@@ -748,9 +765,10 @@
   .d-fox   { left: 140px; top: 308px; width: 120px; transform: translateZ(-40px); }
   .d-goose { left: 266px; top: 300px; width: 122px; transform: translateZ(-40px); }
   .d-bear  { left: 394px; top: 306px; width: 126px; transform: translateZ(-40px); }
-  .d-whale { left: 66px;  top: 238px; width: 106px; transform: translateZ(-70px); }
-  .d-star  { left: 228px; top: 232px; width: 100px; transform: translateZ(-70px); }
-  .d-bunny { left: 370px; top: 240px; width: 104px; transform: translateZ(-70px); }
+  .d-whale { left: 18px;  top: 244px; width: 94px; transform: translateZ(-70px); }
+  .d-star  { left: 150px; top: 238px; width: 94px; transform: translateZ(-70px); }
+  .d-bunny { left: 282px; top: 246px; width: 94px; transform: translateZ(-70px); }
+  .d-squirrel { left: 414px; top: 240px; width: 94px; transform: translateZ(-70px); }
   /* 各娃摆动错拍 */
   .d-dino .d3wrap  { animation-delay: 0s; }
   .d-fox .d3wrap   { animation-delay: .3s; }
@@ -903,6 +921,7 @@
   <button class="rail-dot" data-target="#guojia" style="--c:#a8e6a1"><span class="rail-tip">作品③ 过家家</span>🪿</button>
   <button class="rail-dot" data-target="#myth"   style="--c:#e7cf96"><span class="rail-tip">作品④ 神话画卷</span>🐻</button>
   <button class="rail-dot" data-target="#coral"  style="--c:#5ba8f5"><span class="rail-tip">作品⑤ 深海枯荣</span>🐳</button>
+  <button class="rail-dot" data-target="#ixd"    style="--c:#f4a7bb"><span class="rail-tip">作品⑥ 交互设计</span>🐿️</button>
   <button class="rail-dot" data-target="#thanks" style="--c:#ffb0d8"><span class="rail-tip">联系我</span>🐰</button>
 </nav>
 
@@ -1006,6 +1025,30 @@
       <path d="M52 90 Q56 95 60 90 Q64 95 68 90" stroke="#4a3413" stroke-width="3.5" fill="none" stroke-linecap="round"/>
     </symbol>
 
+    <!-- 马卡龙淡红小松鼠（蓬松大尾巴 + 抱橡果） -->
+    <symbol id="doll-squirrel" viewBox="0 0 120 130">
+      <path d="M78 112 Q118 106 116 64 Q114 32 84 28 Q100 52 92 76 Q84 98 56 106 Z" fill="#ee9fb2"/>
+      <path d="M92 100 Q108 92 106 68" stroke="#fbd3da" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <circle cx="38" cy="30" r="10" fill="#f6b8c4"/>
+      <circle cx="38" cy="30" r="5" fill="#ffe3ea"/>
+      <circle cx="82" cy="30" r="10" fill="#f6b8c4"/>
+      <circle cx="82" cy="30" r="5" fill="#ffe3ea"/>
+      <ellipse cx="60" cy="52" rx="34" ry="30" fill="#f6b8c4"/>
+      <ellipse cx="60" cy="62" rx="22" ry="16" fill="#ffe9ee"/>
+      <ellipse cx="46" cy="48" rx="4.5" ry="7" fill="#5a2a35"/>
+      <ellipse cx="74" cy="48" rx="4.5" ry="7" fill="#5a2a35"/>
+      <circle cx="34" cy="60" r="6" fill="#ff9db0" opacity=".8"/>
+      <circle cx="86" cy="60" r="6" fill="#ff9db0" opacity=".8"/>
+      <ellipse cx="60" cy="58" rx="5" ry="4" fill="#8a4a58"/>
+      <path d="M54 64 Q57 68 60 64 Q63 68 66 64" stroke="#8a4a58" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <ellipse cx="60" cy="100" rx="30" ry="26" fill="#f6b8c4"/>
+      <ellipse cx="60" cy="106" rx="18" ry="15" fill="#ffe9ee"/>
+      <ellipse cx="34" cy="96" rx="9" ry="8" fill="#f6b8c4"/>
+      <ellipse cx="86" cy="96" rx="9" ry="8" fill="#f6b8c4"/>
+      <ellipse cx="60" cy="92" rx="8" ry="9" fill="#c98a5b"/>
+      <path d="M52 86 Q60 79 68 86" stroke="#8a5a35" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    </symbol>
+
     <!-- 米白色小白鹅 -->
     <symbol id="doll-goose" viewBox="0 0 120 130">
       <ellipse cx="60" cy="80" rx="45" ry="42" fill="#f6efdd"/>
@@ -1040,6 +1083,7 @@
     <a href="#guojia">作品③ 🪿</a>
     <a href="#myth">神话 🐻</a>
     <a href="#coral">WORK 05 🐳</a>
+    <a href="#ixd">作品⑥ 🐿️</a>
     <a href="#thanks">Thanks 🐰</a>
   </nav>
 </header>
@@ -1052,7 +1096,7 @@
     <div class="cover-copy">
       <p class="cover-kicker">🎮 ZHANG XINYAN · 2026</p>
       <h1 class="cover-title">作品集</h1>
-      <p class="cover-sub">一台娃娃机 · 六个娃娃 · 五个小作品</p>
+      <p class="cover-sub">一台娃娃机 · 七个娃娃 · 六个小作品</p>
       <p class="cover-hint" id="cover-hint">🖱️ 移动鼠标转动机器 · 点击硬币投币开始</p>
     </div>
 
@@ -1077,6 +1121,7 @@
         <div class="doll3d d-bear" data-target="#myth"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-bear"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-bear"/></svg><span class="doll-tip">作品④ 神话画卷 🐻</span></div></div>
         <div class="doll3d d-whale" data-target="#coral"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-whale"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-whale"/></svg><span class="doll-tip">作品⑤ 深海枯荣 🐳</span></div></div>
         <div class="doll3d d-bunny" data-target="#thanks"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-bunny"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-bunny"/></svg><span class="doll-tip">联系我 🐰</span></div></div>
+        <div class="doll3d d-squirrel" data-target="#ixd"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-squirrel"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-squirrel"/></svg><span class="doll-tip">作品⑥ 交互设计 🐿️</span></div></div>
         <div class="puff3d pf1"></div><div class="puff3d pf2"></div><div class="puff3d pf3"></div>
         <div class="puff3d pf4"></div><div class="puff3d pf5"></div><div class="puff3d pf6"></div>
 
@@ -1557,6 +1602,76 @@
   </div>
 </section>
 
+<!-- ═══════ 作品⑥ · 小松鼠 → 交互设计三卷展板 ═══════ -->
+<section class="board board-s8" id="ixd" data-game>
+  <div class="bg-word">交互<br>生长</div>
+  <div class="wrap">
+    <div class="board-title">
+      <p class="en" style="color:#a04a5e">WORK <span style="color:#d9708a">06</span> 🐿️</p>
+      <p class="zh" style="color:rgba(150,60,90,.78)">抱紧橡果的小松鼠 · 藏着三件让设计「动起来」的交互实验</p>
+    </div>
+
+    <div class="stage gstage" style="--cabback:#ffd9e1; --cab1:#f4a7bb; --cab2:#fbd3da; --based:#fff5f8; --based2:#ffe9ee;">
+      <div class="scene gscene">
+        <div class="panel p-ground"></div>
+        <div class="panel p-back cabback">
+          <div class="rail3"></div>
+        </div>
+        <div class="front3">
+          <div class="rail3"></div>
+          <div class="claw3d">
+            <div class="cable3"></div>
+            <svg class="claw-svg" width="84" height="66" viewBox="0 0 70 56">
+              <rect x="16" y="0" width="38" height="15" rx="7.5" fill="#2a3272"/>
+              <path class="claw-arm left" d="M25 14 Q14 30 26 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+              <path class="claw-arm right" d="M45 14 Q56 30 44 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+            </svg>
+            <div class="caught-slot" tabindex="0" role="button" aria-label="查看交互设计展板">
+              <svg viewBox="0 0 120 130"><use class="caught-use" href="#doll-squirrel"/></svg>
+            </div>
+          </div>
+          <div class="g-doll" data-sym="#doll-squirrel" style="left:35.8%; animation-delay:.5s;"><svg viewBox="0 0 120 130"><use href="#doll-squirrel"/></svg></div>
+          <div class="gpuff" style="left:4%;"></div>
+          <div class="gpuff" style="left:30%; background:#ffeef3;"></div>
+          <div class="gpuff" style="left:58%;"></div>
+          <div class="gpuff" style="left:80%; background:#ffe4ec;"></div>
+        </div>
+        <div class="panel p-top"></div>
+        <div class="panel p-left"></div>
+        <div class="panel p-right"></div>
+        <div class="panel p-glass ghit"></div>
+        <div class="panel p-base-top"></div>
+        <div class="panel p-base">
+          <div class="b-joystick"><span class="stick"></span><span class="ball"></span></div>
+          <button class="b-start gdrop" aria-label="下爪抓娃娃"></button>
+          <div class="b-coin-label">COIN</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="hint" style="color:#a04a5e">🖱️ 移动瞄准 · 点击小松鼠 🐿️ 展开交互设计三卷展板</p>
+
+    <div class="detail">
+      <div class="detail-inner">
+        <div class="detail-card">
+          <h3>《拾果集》 · 交互设计作品三卷</h3>
+          <p>当屏幕开始回应手势、当虚拟空间接住情绪、当花朵因为一次靠近而悄悄闭合——交互设计让作品从「被观看」变成「被参与」。三卷展板，三种媒介：数字展陈、虚拟现实、实体装置，记录我从画面设计走向体验设计的一路尝试。</p>
+
+          <p class="myth-head" style="color:#a04a5e">— 三 卷 · 三 种 媒 介 联 展 —</p>
+          <div class="seal-row"><span class="seal" style="background:#d9708a">数字展陈</span><span class="seal" style="background:#d9708a">VR 疗愈</span><span class="seal" style="background:#d9708a">实体装置</span><span class="seal" style="background:#d9708a">多元交互</span></div>
+          <div class="ixd-scrolls">
+            <figure><img src="__IMG_IXD1__" alt="印象视界交互展板" /><figcaption>《印象视界 · 沉浸卷》以梵高四幕画境为叙事脉络的沉浸式交互展板——手势为笔、光影为墨，打破画框边界，走进画中成为体验的参与者</figcaption></figure>
+            <figure><img src="__IMG_IXD2__" alt="一桌狼藉收拾计划VR展板" /><figcaption>《一桌狼藉收拾计划 · 疗愈卷》深夜餐吧里的 VR 整理体验（Unreal Engine 5）——不必急于解决所有难题，先收拾好眼前这一桌，找回生活的秩序感</figcaption></figure>
+            <figure><img src="__IMG_IXD3__" alt="触绽含羞花卉交互装置展板" /><figcaption>《触绽·含羞 · 装置卷》基于测距感应的仿生花卉开合装置——靠近时花蕾悄悄合拢，退开时重新舒展，一次与植物的含羞对话</figcaption></figure>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions"><button class="play-again">↻ 把小松鼠放回树上，再抓一次</button></div>
+  </div>
+</section>
+
 <!-- ═══════ 板块 5 · 娃娃机抓兔子 → 感谢观看 ═══════ -->
 <section class="board board-s4" id="thanks" data-game>
   <div class="bg-word">THANKS<br>BYE</div>
@@ -1789,7 +1904,7 @@
   document.body.appendChild(lb);
   const lbImg = lb.querySelector('img');
   const lbCount = lb.querySelector('.lb-count');
-  const lbImgs = Array.from(document.querySelectorAll('.gallery img, .myth-scrolls img, .myth-wide img, .coral-scrolls img, .g-poster img'));
+  const lbImgs = Array.from(document.querySelectorAll('.gallery img, .myth-scrolls img, .myth-wide img, .coral-scrolls img, .ixd-scrolls img, .g-poster img'));
   let lbIdx = 0;
   function showLb(i) {
     lbIdx = (i + lbImgs.length) % lbImgs.length;
@@ -1822,7 +1937,7 @@
   });
     // ===== 封面娃娃 = 目录：点击跳转对应板块（含屏幕坐标兜底） =====
     const coverStage = document.querySelector('.cover .stage');
-    const coverDollOrder = ['d-dino', 'd-fox', 'd-goose', 'd-bear', 'd-whale', 'd-star', 'd-bunny']; // 由近及远（前排 z 更大优先）
+    const coverDollOrder = ['d-dino', 'd-fox', 'd-goose', 'd-bear', 'd-whale', 'd-star', 'd-bunny', 'd-squirrel']; // 由近及远（前排 z 更大优先）
     function goDoll(d) {
       const t = document.querySelector(d.dataset.target);
       if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
