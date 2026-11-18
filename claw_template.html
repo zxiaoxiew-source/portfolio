@@ -731,14 +731,26 @@
   }
   .doll3d:hover .d3wrap { animation-play-state: paused; }
   .doll3d:hover .d-front { transform: scale(1.14); filter: drop-shadow(0 16px 16px rgba(35,35,79,.3)) brightness(1.06); }
-  /* 七个娃娃同一深度平面排成一排：同平面绝不穿模，整体前移视觉更大 */
-  .d-dino  { left: 2px;   top: 326px; width: 68px; transform: translateZ(-95px); }
-  .d-fox   { left: 76px;  top: 334px; width: 68px; transform: translateZ(-95px); }
-  .d-star  { left: 150px; top: 314px; width: 68px; transform: translateZ(-95px); }
-  .d-goose { left: 224px; top: 336px; width: 68px; transform: translateZ(-95px); }
-  .d-bear  { left: 298px; top: 320px; width: 68px; transform: translateZ(-95px); }
-  .d-whale { left: 372px; top: 334px; width: 68px; transform: translateZ(-95px); }
-  .d-bunny { left: 446px; top: 326px; width: 68px; transform: translateZ(-95px); }
+  /* 悬浮显示板块名 */
+  .doll-tip {
+    position: absolute; bottom: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%) translateY(6px);
+    background: #23234f; color: #fff; white-space: nowrap;
+    font-size: 13px; font-weight: 800; letter-spacing: .04em;
+    padding: 7px 16px; border-radius: 100px;
+    box-shadow: 0 6px 14px -4px rgba(35,35,79,.5);
+    opacity: 0; pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  .doll3d:hover .doll-tip { opacity: 1; transform: translateX(-50%) translateY(0); }
+  /* 两排错落：前排 4 大娃（z=-40），后排 3 娃（z=-70）——全部在云堆（z≤-90）之前 */
+  .d-dino  { left: 8px;   top: 296px; width: 126px; transform: translateZ(-40px); }
+  .d-fox   { left: 140px; top: 308px; width: 120px; transform: translateZ(-40px); }
+  .d-goose { left: 266px; top: 300px; width: 122px; transform: translateZ(-40px); }
+  .d-bear  { left: 394px; top: 306px; width: 126px; transform: translateZ(-40px); }
+  .d-whale { left: 66px;  top: 238px; width: 106px; transform: translateZ(-70px); }
+  .d-star  { left: 228px; top: 232px; width: 100px; transform: translateZ(-70px); }
+  .d-bunny { left: 370px; top: 240px; width: 104px; transform: translateZ(-70px); }
   /* 各娃摆动错拍 */
   .d-dino .d3wrap  { animation-delay: 0s; }
   .d-fox .d3wrap   { animation-delay: .3s; }
@@ -1058,13 +1070,13 @@
         <div class="panel p-left"></div>
         <div class="panel p-right"></div>
 
-        <div class="doll3d d-dino" data-target="#about" title="个人简介 🦖"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-dino"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-dino"/></svg></div></div>
-        <div class="doll3d d-fox" data-target="#fridge" title="作品① 冰箱食材台账 🦊"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-fox"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-fox"/></svg></div></div>
-        <div class="doll3d d-star" data-target="#mat" title="作品② 感应地毯 ⭐"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-star"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-star"/></svg></div></div>
-        <div class="doll3d d-goose" data-target="#guojia" title="作品③ 过家家 🪿"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-goose"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-goose"/></svg></div></div>
-        <div class="doll3d d-bear" data-target="#myth" title="作品④ 神话画卷 🐻"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-bear"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-bear"/></svg></div></div>
-        <div class="doll3d d-whale" data-target="#coral" title="作品⑤ 深海枯荣 🐳"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-whale"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-whale"/></svg></div></div>
-        <div class="doll3d d-bunny" data-target="#thanks" title="联系我 🐰"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-bunny"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-bunny"/></svg></div></div>
+        <div class="doll3d d-dino" data-target="#about"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-dino"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-dino"/></svg><span class="doll-tip">个人简介 🦖</span></div></div>
+        <div class="doll3d d-fox" data-target="#fridge"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-fox"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-fox"/></svg><span class="doll-tip">作品① 冰箱食材台账 🦊</span></div></div>
+        <div class="doll3d d-star" data-target="#mat"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-star"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-star"/></svg><span class="doll-tip">作品② 感应地毯 ⭐</span></div></div>
+        <div class="doll3d d-goose" data-target="#guojia"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-goose"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-goose"/></svg><span class="doll-tip">作品③ 过家家 🪿</span></div></div>
+        <div class="doll3d d-bear" data-target="#myth"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-bear"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-bear"/></svg><span class="doll-tip">作品④ 神话画卷 🐻</span></div></div>
+        <div class="doll3d d-whale" data-target="#coral"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-whale"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-whale"/></svg><span class="doll-tip">作品⑤ 深海枯荣 🐳</span></div></div>
+        <div class="doll3d d-bunny" data-target="#thanks"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-bunny"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-bunny"/></svg><span class="doll-tip">联系我 🐰</span></div></div>
         <div class="puff3d pf1"></div><div class="puff3d pf2"></div><div class="puff3d pf3"></div>
         <div class="puff3d pf4"></div><div class="puff3d pf5"></div><div class="puff3d pf6"></div>
 
@@ -1810,7 +1822,7 @@
   });
     // ===== 封面娃娃 = 目录：点击跳转对应板块（含屏幕坐标兜底） =====
     const coverStage = document.querySelector('.cover .stage');
-    const coverDollOrder = ['d-goose', 'd-fox', 'd-bunny', 'd-dino', 'd-bear', 'd-whale', 'd-star']; // 由近及远
+    const coverDollOrder = ['d-dino', 'd-fox', 'd-goose', 'd-bear', 'd-whale', 'd-star', 'd-bunny']; // 由近及远（前排 z 更大优先）
     function goDoll(d) {
       const t = document.querySelector(d.dataset.target);
       if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
