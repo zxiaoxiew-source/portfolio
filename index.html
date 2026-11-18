@@ -687,13 +687,24 @@
   .b-start:active { transform: translateY(2px); box-shadow: 0 4px 0 rgba(35,35,79,.22), inset 0 -7px 0 rgba(35,35,79,.14); }
   .b-start::after { content: "START"; }
   .b-coin-label {
-    background: #fff; border-radius: 12px; padding: 10px 14px;
-    font-weight: 900; font-size: 11px; letter-spacing: .18em;
-    box-shadow: 0 4px 0 rgba(35,35,79,.12);
-    display: flex; align-items: center; gap: 8px; flex: none;
+    background: linear-gradient(180deg, #ffffff, #e9ebf3);
+    border-radius: 12px; padding: 12px 20px;
+    font-weight: 900; font-size: 12px; letter-spacing: .16em;
+    box-shadow: inset 0 -4px 0 rgba(35,35,79,.07), 0 5px 0 rgba(35,35,79,.14);
+    display: flex; flex-direction: column; align-items: center; gap: 8px; flex: none;
     margin-top: 8px;
   }
-  .b-coin-label::before { content: "▮"; font-size: 14px; }
+  /* 真实投币口：内凹竖缝 + 高光边 */
+  .b-coin-label::before {
+    content: ""; width: 12px; height: 36px; border-radius: 6px;
+    background: linear-gradient(180deg, #12162e, #454c7c);
+    box-shadow: inset 0 3px 6px rgba(0,0,0,.65), 0 1px 0 rgba(255,255,255,.95);
+  }
+  #coin-slot { cursor: pointer; transition: transform .2s ease; }
+  #coin-slot:hover { transform: translateY(-2px); }
+  #coin-slot:hover::before { box-shadow: inset 0 3px 6px rgba(0,0,0,.65), 0 0 10px rgba(255,201,60,.8); }
+  #coin-slot.glow { box-shadow: inset 0 -4px 0 rgba(35,35,79,.07), 0 5px 0 rgba(35,35,79,.14), 0 0 26px rgba(255,201,60,.85); }
+  #coin-slot.glow::before { box-shadow: inset 0 3px 6px rgba(0,0,0,.65), 0 0 16px rgba(255,201,60,.95); }
 
   /* 机器里的娃娃（3D 立体：正面 + 厚度层 + 缓慢转向） */
   .doll3d {
@@ -720,15 +731,14 @@
   }
   .doll3d:hover .d3wrap { animation-play-state: paused; }
   .doll3d:hover .d-front { transform: scale(1.14); filter: drop-shadow(0 16px 16px rgba(35,35,79,.3)) brightness(1.06); }
-  /* 前排五个：错落摆放 */
-  .d-dino  { left: 8px;   top: 318px; width: 106px; transform: translateZ(-118px); }
-  .d-fox   { left: 106px; top: 332px; width: 100px; transform: translateZ(-100px); }
-  .d-bunny { left: 198px; top: 322px; width: 98px;  transform: translateZ(-116px); }
-  .d-goose { left: 296px; top: 334px; width: 100px; transform: translateZ(-98px); }
-  .d-bear  { left: 392px; top: 320px; width: 108px; transform: translateZ(-120px); }
-  /* 后排两个：垫在前排间隙上方 */
-  .d-whale { left: 58px;  top: 286px; width: 104px; transform: translateZ(-170px); }
-  .d-star  { left: 246px; top: 280px; width: 94px;  transform: translateZ(-188px); }
+  /* 七个娃娃同一深度平面排成一排：同平面绝不穿模，整体前移视觉更大 */
+  .d-dino  { left: 2px;   top: 326px; width: 68px; transform: translateZ(-95px); }
+  .d-fox   { left: 76px;  top: 334px; width: 68px; transform: translateZ(-95px); }
+  .d-star  { left: 150px; top: 314px; width: 68px; transform: translateZ(-95px); }
+  .d-goose { left: 224px; top: 336px; width: 68px; transform: translateZ(-95px); }
+  .d-bear  { left: 298px; top: 320px; width: 68px; transform: translateZ(-95px); }
+  .d-whale { left: 372px; top: 334px; width: 68px; transform: translateZ(-95px); }
+  .d-bunny { left: 446px; top: 326px; width: 68px; transform: translateZ(-95px); }
   /* 各娃摆动错拍 */
   .d-dino .d3wrap  { animation-delay: 0s; }
   .d-fox .d3wrap   { animation-delay: .3s; }
@@ -1756,6 +1766,8 @@
         document.getElementById('about').scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 1600);
     });
+    // 点击投币口也能直接投币
+    coinSlot.addEventListener('click', () => coinBtn.click());
   }
 
   // ===== 图片灯箱：点击任意作品图放大查看，支持左右切换 =====
