@@ -1796,12 +1796,27 @@
       document.body.style.overflow = 'hidden';
     });
   });
-    // ===== 封面娃娃 = 目录：点击跳转对应板块 =====
+    // ===== 封面娃娃 = 目录：点击跳转对应板块（含屏幕坐标兜底） =====
+    const coverStage = document.querySelector('.cover .stage');
+    const coverDollOrder = ['d-goose', 'd-fox', 'd-bunny', 'd-dino', 'd-bear', 'd-whale', 'd-star']; // 由近及远
+    function goDoll(d) {
+      const t = document.querySelector(d.dataset.target);
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
     document.querySelectorAll('.doll3d[data-target]').forEach((d) => {
-      d.addEventListener('click', () => {
-        const t = document.querySelector(d.dataset.target);
-        if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
+      d.addEventListener('click', () => goDoll(d));
+    });
+    coverStage.addEventListener('click', (e) => {
+      if (e.target.closest('button, a, .coin-wrap')) return;
+      for (const cls of coverDollOrder) {
+        const d = coverStage.querySelector('.doll3d.' + cls);
+        if (!d) continue;
+        const r = d.getBoundingClientRect();
+        if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) {
+          goDoll(d);
+          break;
+        }
+      }
     });
 
     // ===== 右侧进度条：爪子沿轨道滑向当前板块 =====
