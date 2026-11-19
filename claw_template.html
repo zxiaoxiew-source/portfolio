@@ -110,6 +110,22 @@
   .ixd-scrolls figcaption { margin-top: 9px; font-weight: 700; font-size: 12.5px; color: #a04a5e; text-align: center; }
   @media (max-width: 900px) { .ixd-scrolls { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 640px) { .ixd-scrolls { grid-template-columns: 1fr; } }
+  .board-s9 { background: linear-gradient(180deg, #e4f3e6, #9ed8ac); }
+  .board-s9 .bg-word { color: rgba(255,255,255,.42); }
+  .board-s9 .hint { background: rgba(255,255,255,.9); color: #3a7a4d !important; }
+  .board-s9 .detail-card { margin-top: 0; }
+  .heritage-scrolls { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 6px 0 22px; }
+  .heritage-scrolls figure {
+    margin: 0; background: #f4faf5; padding: 10px 10px 12px;
+    border-radius: 10px; box-shadow: 0 8px 18px -8px rgba(40,90,60,.4);
+    transition: transform .25s ease;
+  }
+  .heritage-scrolls figure:nth-child(odd) { transform: rotate(-1.2deg); }
+  .heritage-scrolls figure:nth-child(even) { transform: rotate(1.2deg); }
+  .heritage-scrolls figure:hover { transform: rotate(0) scale(1.02); position: relative; z-index: 2; }
+  .heritage-scrolls img { width: 100%; display: block; border-radius: 6px; }
+  .heritage-scrolls figcaption { margin-top: 9px; font-weight: 700; font-size: 13px; color: #3a7a4d; text-align: center; }
+  @media (max-width: 760px) { .heritage-scrolls { grid-template-columns: 1fr; } }
 
   /* 神话概念图 · 横竖卷轴分展 */
   .myth-scrolls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 6px 0 22px; }
@@ -293,7 +309,7 @@
 
   .actions { text-align: center; margin-top: 26px; position: relative; z-index: 2; }
   /* 图片灯箱：点击放大查看 */
-  .gallery img, .myth-scrolls img, .myth-wide img, .coral-scrolls img, .ixd-scrolls img, .g-poster img { cursor: zoom-in; }
+  .gallery img, .myth-scrolls img, .myth-wide img, .coral-scrolls img, .ixd-scrolls img, .heritage-scrolls img, .g-poster img { cursor: zoom-in; }
   .lightbox {
     position: fixed; inset: 0; z-index: 999;
     background: rgba(18,18,46,.88);
@@ -765,10 +781,11 @@
   .d-fox   { left: 140px; top: 308px; width: 120px; transform: translateZ(-40px); }
   .d-goose { left: 266px; top: 300px; width: 122px; transform: translateZ(-40px); }
   .d-bear  { left: 394px; top: 306px; width: 126px; transform: translateZ(-40px); }
-  .d-whale { left: 18px;  top: 244px; width: 94px; transform: translateZ(-70px); }
-  .d-star  { left: 150px; top: 238px; width: 94px; transform: translateZ(-70px); }
-  .d-bunny { left: 282px; top: 246px; width: 94px; transform: translateZ(-70px); }
-  .d-squirrel { left: 414px; top: 240px; width: 94px; transform: translateZ(-70px); }
+  .d-whale { left: 4px;   top: 246px; width: 90px; transform: translateZ(-70px); }
+  .d-star  { left: 106px; top: 240px; width: 90px; transform: translateZ(-70px); }
+  .d-bunny { left: 208px; top: 248px; width: 90px; transform: translateZ(-70px); }
+  .d-squirrel { left: 310px; top: 242px; width: 90px; transform: translateZ(-70px); }
+  .d-parrot   { left: 412px; top: 246px; width: 90px; transform: translateZ(-70px); }
   /* 各娃摆动错拍 */
   .d-dino .d3wrap  { animation-delay: 0s; }
   .d-fox .d3wrap   { animation-delay: .3s; }
@@ -777,6 +794,8 @@
   .d-bear .d3wrap  { animation-delay: 1.2s; }
   .d-whale .d3wrap { animation-delay: .6s; }
   .d-star .d3wrap  { animation-delay: 1.1s; }
+  .d-squirrel .d3wrap { animation-delay: .4s; }
+  .d-parrot .d3wrap   { animation-delay: 1.5s; }
 
   /* 右侧创意进度条：爪子沿轨道下滑，抓住当前板块 */
   .rail-nav {
@@ -922,6 +941,7 @@
   <button class="rail-dot" data-target="#myth"   style="--c:#e7cf96"><span class="rail-tip">作品④ 神话画卷</span>🐻</button>
   <button class="rail-dot" data-target="#coral"  style="--c:#5ba8f5"><span class="rail-tip">作品⑤ 深海枯荣</span>🐳</button>
   <button class="rail-dot" data-target="#ixd"    style="--c:#f4a7bb"><span class="rail-tip">作品⑥ 交互设计</span>🐿️</button>
+  <button class="rail-dot" data-target="#heritage" style="--c:#8fce9f"><span class="rail-tip">作品⑦ 古建解码</span>🦜</button>
   <button class="rail-dot" data-target="#thanks" style="--c:#ffb0d8"><span class="rail-tip">联系我</span>🐰</button>
 </nav>
 
@@ -1049,6 +1069,26 @@
       <path d="M52 86 Q60 79 68 86" stroke="#8a5a35" stroke-width="3.5" fill="none" stroke-linecap="round"/>
     </symbol>
 
+    <!-- 马卡龙绿小鹦鹉（弯喙 + 尾羽 + 站杆） -->
+    <symbol id="doll-parrot" viewBox="0 0 120 130">
+      <path d="M64 92 Q88 100 100 124 Q86 122 74 112 Z" fill="#7dbf90"/>
+      <path d="M58 98 Q78 112 86 126 Q74 120 60 110 Z" fill="#a8d8b0"/>
+      <path d="M48 22 Q42 6 54 4 Q58 12 58 22 Z" fill="#8fcfa0"/>
+      <ellipse cx="60" cy="46" rx="32" ry="28" fill="#a8d8b0"/>
+      <ellipse cx="66" cy="58" rx="16" ry="13" fill="#eaf7ee"/>
+      <path d="M78 52 Q92 54 90 66 Q88 74 78 70 Q84 62 78 56 Z" fill="#f2c66a"/>
+      <path d="M80 54 Q88 58 86 64" stroke="#d9a63e" stroke-width="2" fill="none"/>
+      <ellipse cx="46" cy="42" rx="4.5" ry="7" fill="#2a4a30"/>
+      <ellipse cx="72" cy="42" rx="4.5" ry="7" fill="#2a4a30"/>
+      <circle cx="34" cy="54" r="6" fill="#ffc9d2" opacity=".85"/>
+      <ellipse cx="26" cy="86" rx="13" ry="20" fill="#8fcfa0"/>
+      <ellipse cx="94" cy="86" rx="13" ry="20" fill="#8fcfa0"/>
+      <ellipse cx="60" cy="94" rx="30" ry="30" fill="#a8d8b0"/>
+      <ellipse cx="60" cy="102" rx="18" ry="17" fill="#eaf7ee"/>
+      <rect x="40" y="124" width="40" height="5" rx="2.5" fill="#b98a5a"/>
+      <path d="M50 120 L50 126 M70 120 L70 126" stroke="#e8a84f" stroke-width="4" stroke-linecap="round"/>
+    </symbol>
+
     <!-- 米白色小白鹅 -->
     <symbol id="doll-goose" viewBox="0 0 120 130">
       <ellipse cx="60" cy="80" rx="45" ry="42" fill="#f6efdd"/>
@@ -1084,6 +1124,7 @@
     <a href="#myth">神话 🐻</a>
     <a href="#coral">WORK 05 🐳</a>
     <a href="#ixd">作品⑥ 🐿️</a>
+    <a href="#heritage">作品⑦ 🦜</a>
     <a href="#thanks">Thanks 🐰</a>
   </nav>
 </header>
@@ -1096,7 +1137,7 @@
     <div class="cover-copy">
       <p class="cover-kicker">🎮 ZHANG XINYAN · 2026</p>
       <h1 class="cover-title">作品集</h1>
-      <p class="cover-sub">一台娃娃机 · 七个娃娃 · 六个小作品</p>
+      <p class="cover-sub">一台娃娃机 · 八个娃娃 · 七个小作品</p>
       <p class="cover-hint" id="cover-hint">🖱️ 移动鼠标转动机器 · 点击硬币投币开始</p>
     </div>
 
@@ -1122,6 +1163,7 @@
         <div class="doll3d d-whale" data-target="#coral"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-whale"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-whale"/></svg><span class="doll-tip">作品⑤ 深海枯荣 🐳</span></div></div>
         <div class="doll3d d-bunny" data-target="#thanks"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-bunny"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-bunny"/></svg><span class="doll-tip">联系我 🐰</span></div></div>
         <div class="doll3d d-squirrel" data-target="#ixd"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-squirrel"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-squirrel"/></svg><span class="doll-tip">作品⑥ 交互设计 🐿️</span></div></div>
+        <div class="doll3d d-parrot" data-target="#heritage"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><use href="#doll-parrot"/></svg><svg class="d-front" viewBox="0 0 120 130"><use href="#doll-parrot"/></svg><span class="doll-tip">作品⑦ 古建解码 🦜</span></div></div>
         <div class="puff3d pf1"></div><div class="puff3d pf2"></div><div class="puff3d pf3"></div>
         <div class="puff3d pf4"></div><div class="puff3d pf5"></div><div class="puff3d pf6"></div>
 
@@ -1672,6 +1714,75 @@
   </div>
 </section>
 
+<!-- ═══════ 作品⑦ · 小鹦鹉 → 古建解码 · 苏杭调研展板 ═══════ -->
+<section class="board board-s9" id="heritage" data-game>
+  <div class="bg-word">古建<br>解码</div>
+  <div class="wrap">
+    <div class="board-title">
+      <p class="en" style="color:#3a7a4d">WORK <span style="color:#5a9e6f">07</span> 🦜</p>
+      <p class="zh" style="color:rgba(40,90,60,.78)">站在横杆上的小鹦鹉 · 会学舌，也会替古建筑讲故事</p>
+    </div>
+
+    <div class="stage gstage" style="--cabback:#d2ecd8; --cab1:#8fce9f; --cab2:#bce8c6; --based:#f2faf4; --based2:#e0f3e5;">
+      <div class="scene gscene">
+        <div class="panel p-ground"></div>
+        <div class="panel p-back cabback">
+          <div class="rail3"></div>
+        </div>
+        <div class="front3">
+          <div class="rail3"></div>
+          <div class="claw3d">
+            <div class="cable3"></div>
+            <svg class="claw-svg" width="84" height="66" viewBox="0 0 70 56">
+              <rect x="16" y="0" width="38" height="15" rx="7.5" fill="#2a3272"/>
+              <path class="claw-arm left" d="M25 14 Q14 30 26 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+              <path class="claw-arm right" d="M45 14 Q56 30 44 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
+            </svg>
+            <div class="caught-slot" tabindex="0" role="button" aria-label="查看古建解码展板">
+              <svg viewBox="0 0 120 130"><use class="caught-use" href="#doll-parrot"/></svg>
+            </div>
+          </div>
+          <div class="g-doll" data-sym="#doll-parrot" style="left:35.8%; animation-delay:.2s;"><svg viewBox="0 0 120 130"><use href="#doll-parrot"/></svg></div>
+          <div class="gpuff" style="left:4%;"></div>
+          <div class="gpuff" style="left:30%; background:#e6f6ea;"></div>
+          <div class="gpuff" style="left:58%;"></div>
+          <div class="gpuff" style="left:80%; background:#dff2e4;"></div>
+        </div>
+        <div class="panel p-top"></div>
+        <div class="panel p-left"></div>
+        <div class="panel p-right"></div>
+        <div class="panel p-glass ghit"></div>
+        <div class="panel p-base-top"></div>
+        <div class="panel p-base">
+          <div class="b-joystick"><span class="stick"></span><span class="ball"></span></div>
+          <button class="b-start gdrop" aria-label="下爪抓娃娃"></button>
+          <div class="b-coin-label">COIN</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="hint" style="color:#3a7a4d">🖱️ 移动瞄准 · 点击小鹦鹉 🦜 展开古建解码双卷展板</p>
+
+    <div class="detail">
+      <div class="detail-inner">
+        <div class="detail-card">
+          <h3>《古建解码》 · 苏式建筑空间叙事双卷展板</h3>
+          <p>走进苏州平江历史街区，粉墙黛瓦静默不语——但只要给它们一副「声带」，飞檐、天井、厅堂就会自己开口。以「让苏式建筑自己讲述空间叙事」为核心策略：构建库、空间库、文化库三级信息档案，配合微信小程序与 NFC 点位感应，扫一扫木构与彩画，游线即信息、位置即内容。这一卷调研与一卷策展，是我在苏杭大地上写下的一次数字体验更新。</p>
+
+          <p class="myth-head" style="color:#3a7a4d">— 双 卷 · 调 研 × 策 展 —</p>
+          <div class="seal-row"><span class="seal" style="background:#5a9e6f">地域调研</span><span class="seal" style="background:#5a9e6f">空间叙事</span><span class="seal" style="background:#5a9e6f">NFC 交互</span><span class="seal" style="background:#5a9e6f">数字体验</span></div>
+          <div class="heritage-scrolls">
+            <figure><img src="__IMG_HER1__" alt="古建解码调研展板" /><figcaption>《古建解码 · 调研卷》平江历史街区的场地调研与苏式建筑分类——从民居、同祠行馆到寺庙建筑，梳理苏式空间的形制基因与人群痛点</figcaption></figure>
+            <figure><img src="__IMG_HER2__" alt="古建解码策展展板" /><figcaption>《古建解码 · 策展卷》三级信息库 × 微信小程序 × NFC 点位感应——四大体验层与八种体验模式，让沉默的建筑自己开口讲空间叙事</figcaption></figure>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions"><button class="play-again">↻ 把小鹦鹉放回横杆，再抓一次</button></div>
+  </div>
+</section>
+
 <!-- ═══════ 板块 5 · 娃娃机抓兔子 → 感谢观看 ═══════ -->
 <section class="board board-s4" id="thanks" data-game>
   <div class="bg-word">THANKS<br>BYE</div>
@@ -1904,7 +2015,7 @@
   document.body.appendChild(lb);
   const lbImg = lb.querySelector('img');
   const lbCount = lb.querySelector('.lb-count');
-  const lbImgs = Array.from(document.querySelectorAll('.gallery img, .myth-scrolls img, .myth-wide img, .coral-scrolls img, .ixd-scrolls img, .g-poster img'));
+  const lbImgs = Array.from(document.querySelectorAll('.gallery img, .myth-scrolls img, .myth-wide img, .coral-scrolls img, .ixd-scrolls img, .heritage-scrolls img, .g-poster img'));
   let lbIdx = 0;
   function showLb(i) {
     lbIdx = (i + lbImgs.length) % lbImgs.length;
@@ -1937,7 +2048,7 @@
   });
     // ===== 封面娃娃 = 目录：点击跳转对应板块（含屏幕坐标兜底） =====
     const coverStage = document.querySelector('.cover .stage');
-    const coverDollOrder = ['d-dino', 'd-fox', 'd-goose', 'd-bear', 'd-whale', 'd-star', 'd-bunny', 'd-squirrel']; // 由近及远（前排 z 更大优先）
+    const coverDollOrder = ['d-dino', 'd-fox', 'd-goose', 'd-bear', 'd-whale', 'd-star', 'd-bunny', 'd-squirrel', 'd-parrot']; // 由近及远（前排 z 更大优先）
     function goDoll(d) {
       const t = document.querySelector(d.dataset.target);
       if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
