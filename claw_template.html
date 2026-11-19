@@ -143,6 +143,33 @@
     margin-top: 9px; font-weight: 700; font-size: 13px; color: #6b4a1c; text-align: center;
   }
   .myth-wide { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 6px 0 26px; }
+  .aid-hero figure {
+    margin: 0; background: #2a1c22; padding: 10px;
+    border-radius: 10px; box-shadow: 0 10px 22px -8px rgba(60,20,10,.5);
+    transition: transform .25s ease;
+  }
+  .aid-hero figure:hover { transform: translateY(-4px) scale(1.01); }
+  .aid-hero img { width: 100%; display: block; border-radius: 6px; }
+  .aid-hero figcaption {
+    margin-top: 8px; font-weight: 700; font-size: 13px;
+    color: #e8c79a; text-align: center;
+  }
+  .aid-stills { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 0 0 8px; }
+  .aid-stills figure {
+    margin: 0; background: #2a1c22; padding: 9px;
+    border-radius: 10px; box-shadow: 0 8px 18px -8px rgba(60,20,10,.5);
+    transition: transform .25s ease;
+  }
+  .aid-stills figure:nth-child(odd) { transform: rotate(-.8deg); }
+  .aid-stills figure:nth-child(even) { transform: rotate(.8deg); }
+  .aid-stills figure:hover { transform: rotate(0) scale(1.02); position: relative; z-index: 2; }
+  .aid-stills figure.aid-full { grid-column: 1 / -1; transform: none; }
+  .aid-stills img { width: 100%; display: block; border-radius: 6px; }
+  .aid-stills figcaption {
+    margin-top: 7px; font-weight: 700; font-size: 12.5px;
+    color: #e8c79a; text-align: center;
+  }
+  @media (max-width: 760px) { .aid-stills { grid-template-columns: 1fr; } }
   .seal-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 4px 0 18px; }
   .seal {
     background: #b03a2e; color: #fff; font-weight: 900; font-size: 12.5px;
@@ -309,7 +336,7 @@
 
   .actions { text-align: center; margin-top: 26px; position: relative; z-index: 2; }
   /* 图片灯箱：点击放大查看 */
-  .gallery img, .myth-scrolls img, .myth-wide img, .coral-scrolls img, .ixd-scrolls img, .heritage-scrolls img, .g-poster img { cursor: zoom-in; }
+  .gallery img, .myth-scrolls img, .myth-wide img, .coral-scrolls img, .ixd-scrolls img, .heritage-scrolls img, .aid-hero img, .aid-stills img, .g-poster img { cursor: zoom-in; }
   .lightbox {
     position: fixed; inset: 0; z-index: 999;
     background: rgba(18,18,46,.88);
@@ -1069,24 +1096,26 @@
       <path d="M52 86 Q60 79 68 86" stroke="#8a5a35" stroke-width="3.5" fill="none" stroke-linecap="round"/>
     </symbol>
 
-    <!-- 马卡龙绿小鹦鹉（弯喙 + 尾羽 + 站杆） -->
+    <!-- 马卡龙绿小鹦鹉（弯喙 + 尾羽 + 站杆 · 头在最前层） -->
     <symbol id="doll-parrot" viewBox="0 0 120 130">
-      <path d="M64 92 Q88 100 100 124 Q86 122 74 112 Z" fill="#7dbf90"/>
-      <path d="M58 98 Q78 112 86 126 Q74 120 60 110 Z" fill="#a8d8b0"/>
-      <path d="M48 22 Q42 6 54 4 Q58 12 58 22 Z" fill="#8fcfa0"/>
-      <ellipse cx="60" cy="46" rx="32" ry="28" fill="#a8d8b0"/>
-      <ellipse cx="66" cy="58" rx="16" ry="13" fill="#eaf7ee"/>
-      <path d="M78 52 Q92 54 90 66 Q88 74 78 70 Q84 62 78 56 Z" fill="#f2c66a"/>
-      <path d="M80 54 Q88 58 86 64" stroke="#d9a63e" stroke-width="2" fill="none"/>
-      <ellipse cx="46" cy="42" rx="4.5" ry="7" fill="#2a4a30"/>
-      <ellipse cx="72" cy="42" rx="4.5" ry="7" fill="#2a4a30"/>
-      <circle cx="34" cy="54" r="6" fill="#ffc9d2" opacity=".85"/>
-      <ellipse cx="26" cy="86" rx="13" ry="20" fill="#8fcfa0"/>
-      <ellipse cx="94" cy="86" rx="13" ry="20" fill="#8fcfa0"/>
-      <ellipse cx="60" cy="94" rx="30" ry="30" fill="#a8d8b0"/>
-      <ellipse cx="60" cy="102" rx="18" ry="17" fill="#eaf7ee"/>
-      <rect x="40" y="124" width="40" height="5" rx="2.5" fill="#b98a5a"/>
-      <path d="M50 120 L50 126 M70 120 L70 126" stroke="#e8a84f" stroke-width="4" stroke-linecap="round"/>
+      <path d="M70 88 Q98 96 108 122 Q92 120 76 108 Z" fill="#7dbf90"/>
+      <path d="M62 96 Q82 108 90 124 Q76 118 60 106 Z" fill="#a8d8b0"/>
+      <ellipse cx="60" cy="92" rx="29" ry="27" fill="#a8d8b0"/>
+      <ellipse cx="60" cy="99" rx="16" ry="14" fill="#eaf7ee"/>
+      <ellipse cx="28" cy="88" rx="12" ry="19" fill="#8fcfa0"/>
+      <ellipse cx="92" cy="88" rx="12" ry="19" fill="#8fcfa0"/>
+      <ellipse cx="56" cy="44" rx="31" ry="27" fill="#a8d8b0"/>
+      <path d="M46 20 Q40 4 52 2 Q57 11 57 21 Z" fill="#8fcfa0"/>
+      <ellipse cx="65" cy="54" rx="14" ry="11" fill="#eaf7ee"/>
+      <path d="M77 46 Q90 48 88 60 Q86 69 77 64 Q83 57 77 51 Z" fill="#f2c66a"/>
+      <path d="M79 49 Q86 52 85 58" stroke="#d9a63e" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <ellipse cx="44" cy="40" rx="4.5" ry="6.5" fill="#2a4a30"/>
+      <ellipse cx="66" cy="40" rx="4.5" ry="6.5" fill="#2a4a30"/>
+      <circle cx="45.5" cy="37.5" r="1.6" fill="#fff"/>
+      <circle cx="67.5" cy="37.5" r="1.6" fill="#fff"/>
+      <circle cx="34" cy="52" r="5.5" fill="#ffc9d2" opacity=".85"/>
+      <path d="M50 116 L50 122 M70 116 L70 122" stroke="#e8a84f" stroke-width="4" stroke-linecap="round"/>
+      <rect x="40" y="122" width="40" height="5" rx="2.5" fill="#b98a5a"/>
     </symbol>
 
     <!-- 米白色小白鹅 -->
@@ -1567,6 +1596,19 @@
             <figure><img src="__IMG_JW__" alt="精卫填海立轴" /><figcaption>《精卫填海》以微末之躯，誓平万顷沧波</figcaption></figure>
             <figure><img src="__IMG_CE__" alt="嫦娥奔月立轴" /><figcaption>《嫦娥奔月》万古清辉，独赴广寒</figcaption></figure>
           </div>
+
+          <p class="myth-head">— A I G C 延 伸 · 荆 楚 山 海 遗 韵 —</p>
+          <p>当 AI 的笔尖蘸上楚地的墨：九头神鸟从剪纸的红纸里振翅而出，山海经的异兽循着匠人的刻刀显形。一组 AIGC 宣传主视觉与 AI 短片帧选——上古神话与湖北非遗在同一帧里对撞、共生，让千年传说在数字时代再次起飞。</p>
+          <div class="aid-hero">
+            <figure><img src="__IMG_AID1__" alt="荆楚山海遗韵主视觉" /><figcaption>《荆楚山海遗韵 · 主视觉》凤鸣楚天，山海有灵——一张海报聚齐上古神兽、非遗匠人与楚地山河</figcaption></figure>
+          </div>
+          <div class="aid-stills">
+            <figure><img src="__IMG_AID2__" alt="三代匠人剪纸" /><figcaption>三代同剪一只凤——非遗技艺的血脉传承</figcaption></figure>
+            <figure><img src="__IMG_AID3__" alt="九头神鸟浴火" /><figcaption>九头神鸟浴火——从剪纸上飞出的楚地图腾</figcaption></figure>
+            <figure><img src="__IMG_AID4__" alt="星夜凤翳巡天" /><figcaption>星夜凤翳巡天——山海异兽掠过楚国黄昏</figcaption></figure>
+            <figure><img src="__IMG_AID5__" alt="八荒神兽应召" /><figcaption>八荒神兽应召——发光的灵牌唤醒山海经众生</figcaption></figure>
+            <figure class="aid-full"><img src="__IMG_AID6__" alt="AI短片三帧混剪" /><figcaption>短片三帧混剪——金乌裂帛 · 纹样生辉 · 王城点灯</figcaption></figure>
+          </div>
         </div>
       </div>
     </div>
@@ -2015,7 +2057,7 @@
   document.body.appendChild(lb);
   const lbImg = lb.querySelector('img');
   const lbCount = lb.querySelector('.lb-count');
-  const lbImgs = Array.from(document.querySelectorAll('.gallery img, .myth-scrolls img, .myth-wide img, .coral-scrolls img, .ixd-scrolls img, .heritage-scrolls img, .g-poster img'));
+  const lbImgs = Array.from(document.querySelectorAll('.gallery img, .myth-scrolls img, .myth-wide img, .coral-scrolls img, .ixd-scrolls img, .heritage-scrolls img, .aid-hero img, .aid-stills img, .g-poster img'));
   let lbIdx = 0;
   function showLb(i) {
     lbIdx = (i + lbImgs.length) % lbImgs.length;
