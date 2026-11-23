@@ -458,7 +458,7 @@
   }
   .g-doll:hover { transform: scale(1.08); }
   .g-doll:hover svg { animation-play-state: paused; }
-  .g-doll svg { width: 100%; display: block; filter: drop-shadow(0 12px 12px rgba(35,35,79,.24)); animation: dollbob 3.4s ease-in-out infinite; }
+  .g-doll svg { width: 100%; display: block; filter: drop-shadow(0 16px 14px rgba(35,35,79,.3)) drop-shadow(0 3px 2px rgba(35,35,79,.14)); animation: dollbob 3.4s ease-in-out infinite; }
   .g-doll.gone { opacity: 0; transform: translateY(34px) scale(.6); }
 
   .gpuff {
@@ -467,7 +467,7 @@
   }
 
   .caught-slot { display: none; margin-top: -10px; width: 170px; cursor: pointer; }
-  .caught-slot svg { width: 100%; display: block; filter: drop-shadow(0 10px 12px rgba(35,35,79,.26)); }
+  .caught-slot svg { width: 100%; display: block; filter: drop-shadow(0 14px 13px rgba(35,35,79,.3)) drop-shadow(0 3px 2px rgba(35,35,79,.14)); }
   .claw3d.caught .caught-slot { display: block; animation: dollswing 2.8s ease-in-out infinite; transform-origin: top center; }
 
   /* ---------- 展开详情 ---------- */
@@ -839,32 +839,21 @@
   }
   @keyframes dollbob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
   .d3wrap svg { width: 100%; display: block; }
+  /* 厚度层：贴合娃娃自身轮廓的暗色背面，转动时露出体积（不再是圆球） */
   .d-back {
-    position: absolute; inset: 5% 3% 9%; border-radius: 50%;
-    transform: translateZ(-8px);
-    filter: brightness(.42) saturate(.55) blur(6px);
-    opacity: .5;
+    position: absolute; inset: 0;
+    transform: translateZ(-7px) scale(.985);
+    filter: brightness(.58) saturate(.78) blur(1.5px);
+    opacity: .85;
   }
-  /* ===== 3D 球体质感：所有娃娃统一球面光影（封面 / 板块机 / 抓起的） ===== */
-  .caught-slot { position: relative; }
-  .d3wrap::after, .g-doll::after, .caught-slot::after {
-    content: "";
-    position: absolute; left: 4%; top: 5%; width: 92%; height: 88%;
-    border-radius: 50%; pointer-events: none; z-index: 6;
-    background:
-      radial-gradient(ellipse 40% 36% at 30% 24%, rgba(255,255,255,.85) 0%, rgba(255,255,255,.2) 52%, rgba(255,255,255,0) 100%),
-      radial-gradient(ellipse 88% 90% at 50% 46%, rgba(255,255,255,0) 55%, rgba(28,24,70,.1) 76%, rgba(28,24,70,.36) 100%);
-    box-shadow: inset 0 -12px 24px rgba(28,24,70,.18), inset 6px 8px 18px rgba(255,255,255,.16);
-    transition: transform .25s ease;
-  }
-  .doll3d:hover .d3wrap::after { transform: scale(1.14); }
+  /* ===== 立体圆润 3D：球面明暗直接画进娃娃 SVG 本体，无任何外加透明球 ===== */
   .d-front {
     position: relative;
-    filter: drop-shadow(0 10px 10px rgba(35,35,79,.18));
+    filter: drop-shadow(0 16px 15px rgba(35,35,79,.3)) drop-shadow(0 3px 2px rgba(35,35,79,.12));
     transition: transform .25s ease, filter .25s ease;
   }
   .doll3d:hover .d3wrap { animation-play-state: paused; }
-  .doll3d:hover .d-front { transform: scale(1.14); filter: drop-shadow(0 16px 16px rgba(35,35,79,.3)) brightness(1.06); }
+  .doll3d:hover .d-front { transform: scale(1.14); filter: drop-shadow(0 20px 20px rgba(35,35,79,.34)) brightness(1.05); }
   /* 悬浮显示板块名 */
   .doll-tip {
     position: absolute; bottom: calc(100% + 8px); left: 50%;
@@ -1049,12 +1038,41 @@
 <!-- ═══════ 娃娃 SVG 符号库 ═══════ -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
+    <!-- 球面立体渐变：左上镜面高光 → 亮 → 主色 → 右下暗，明暗贴合娃娃自身轮廓 -->
+    <radialGradient id="orb-dino" cx="34%" cy="26%" r="84%" fx="27%" fy="19%">
+      <stop offset="0%" stop-color="#ffffff"/><stop offset="13%" stop-color="#dcf87f"/><stop offset="56%" stop-color="#b9e94c"/><stop offset="100%" stop-color="#7ea824"/>
+    </radialGradient>
+    <radialGradient id="orb-whale" cx="34%" cy="26%" r="84%" fx="27%" fy="19%">
+      <stop offset="0%" stop-color="#ffffff"/><stop offset="13%" stop-color="#a8d6ff"/><stop offset="56%" stop-color="#5ba8f5"/><stop offset="100%" stop-color="#2c72c8"/>
+    </radialGradient>
+    <radialGradient id="orb-star" cx="34%" cy="26%" r="84%" fx="27%" fy="19%">
+      <stop offset="0%" stop-color="#ffffff"/><stop offset="13%" stop-color="#ffe486"/><stop offset="56%" stop-color="#ffc93c"/><stop offset="100%" stop-color="#d99210"/>
+    </radialGradient>
+    <radialGradient id="orb-bunny" cx="34%" cy="26%" r="84%" fx="27%" fy="19%">
+      <stop offset="0%" stop-color="#ffffff"/><stop offset="13%" stop-color="#e6d2ff"/><stop offset="56%" stop-color="#c9a6f2"/><stop offset="100%" stop-color="#9870c8"/>
+    </radialGradient>
+    <radialGradient id="orb-bear" cx="34%" cy="26%" r="84%" fx="27%" fy="19%">
+      <stop offset="0%" stop-color="#ffffff"/><stop offset="13%" stop-color="#ecd6a4"/><stop offset="56%" stop-color="#c8a76a"/><stop offset="100%" stop-color="#917038"/>
+    </radialGradient>
+    <radialGradient id="orb-fox" cx="34%" cy="26%" r="84%" fx="27%" fy="19%">
+      <stop offset="0%" stop-color="#ffffff"/><stop offset="13%" stop-color="#ffc296"/><stop offset="56%" stop-color="#f2925c"/><stop offset="100%" stop-color="#c05e28"/>
+    </radialGradient>
+    <radialGradient id="orb-squirrel" cx="34%" cy="26%" r="84%" fx="27%" fy="19%">
+      <stop offset="0%" stop-color="#ffffff"/><stop offset="13%" stop-color="#ffe0e7"/><stop offset="56%" stop-color="#f6b8c4"/><stop offset="100%" stop-color="#d07e96"/>
+    </radialGradient>
+    <radialGradient id="orb-parrot" cx="34%" cy="26%" r="84%" fx="27%" fy="19%">
+      <stop offset="0%" stop-color="#ffffff"/><stop offset="13%" stop-color="#dcf4d8"/><stop offset="56%" stop-color="#b5dcb2"/><stop offset="100%" stop-color="#7aa878"/>
+    </radialGradient>
+    <radialGradient id="orb-goose" cx="34%" cy="26%" r="84%" fx="27%" fy="19%">
+      <stop offset="0%" stop-color="#ffffff"/><stop offset="13%" stop-color="#fffdf6"/><stop offset="56%" stop-color="#f6efdd"/><stop offset="100%" stop-color="#d3c5a2"/>
+    </radialGradient>
+
     <!-- 绿色 Q 版小恐龙 -->
     <symbol id="doll-dino" viewBox="0 0 120 130">
       <ellipse cx="44" cy="44" rx="8" ry="9" fill="#9fd632"/>
       <ellipse cx="60" cy="38" rx="9" ry="10" fill="#9fd632"/>
       <ellipse cx="76" cy="44" rx="8" ry="9" fill="#9fd632"/>
-      <ellipse cx="60" cy="80" rx="45" ry="42" fill="#b9e94c"/>
+      <ellipse cx="60" cy="80" rx="45" ry="42" fill="url(#orb-dino)"/>
       <ellipse cx="60" cy="96" rx="26" ry="19" fill="#e2f8a8"/>
       <ellipse cx="18" cy="90" rx="11" ry="9" fill="#b9e94c"/>
       <ellipse cx="102" cy="90" rx="11" ry="9" fill="#b9e94c"/>
@@ -1069,7 +1087,7 @@
     <symbol id="doll-whale" viewBox="0 0 120 130">
       <path d="M60 18 q-3 -9 3 -12" stroke="#8fd0ff" stroke-width="4" fill="none" stroke-linecap="round"/>
       <circle cx="64" cy="8" r="4" fill="#8fd0ff"/>
-      <ellipse cx="60" cy="76" rx="47" ry="42" fill="#5ba8f5"/>
+      <ellipse cx="60" cy="76" rx="47" ry="42" fill="url(#orb-whale)"/>
       <path d="M18 88 Q60 116 102 88 Q60 102 18 88 Z" fill="#cfe8ff"/>
       <path d="M104 66 Q120 52 114 38 Q122 58 108 74 Z" fill="#5ba8f5"/>
       <rect x="44" y="60" width="9" height="19" rx="4.5" fill="#23234f"/>
@@ -1082,7 +1100,7 @@
     <!-- 黄色 Q 版星星 -->
     <symbol id="doll-star" viewBox="0 0 120 130">
       <path d="M60 14 L74 50 L114 54 L84 78 L93 116 L60 94 L27 116 L36 78 L6 54 L46 50 Z"
-            fill="#ffc93c" stroke="#ffc93c" stroke-width="18" stroke-linejoin="round"/>
+            fill="url(#orb-star)" stroke="#ffc93c" stroke-width="18" stroke-linejoin="round"/>
       <rect x="46" y="62" width="9" height="19" rx="4.5" fill="#23234f"/>
       <rect x="66" y="62" width="9" height="19" rx="4.5" fill="#23234f"/>
       <circle cx="36" cy="80" r="6" fill="#ff9fb8" opacity=".8"/>
@@ -1100,7 +1118,7 @@
         <ellipse cx="78" cy="30" rx="12" ry="28" fill="#c9a6f2"/>
         <ellipse cx="78" cy="32" rx="6" ry="18" fill="#e9dcff"/>
       </g>
-      <ellipse cx="60" cy="86" rx="44" ry="40" fill="#c9a6f2"/>
+      <ellipse cx="60" cy="86" rx="44" ry="40" fill="url(#orb-bunny)"/>
       <ellipse cx="60" cy="100" rx="25" ry="18" fill="#e9dcff"/>
       <ellipse cx="16" cy="94" rx="11" ry="9" fill="#c9a6f2"/>
       <ellipse cx="104" cy="94" rx="11" ry="9" fill="#c9a6f2"/>
@@ -1117,7 +1135,7 @@
       <circle cx="30" cy="32" r="6.5" fill="#efe0be"/>
       <circle cx="90" cy="32" r="14" fill="#c8a76a"/>
       <circle cx="90" cy="32" r="6.5" fill="#efe0be"/>
-      <ellipse cx="60" cy="72" rx="47" ry="46" fill="#c8a76a"/>
+      <ellipse cx="60" cy="72" rx="47" ry="46" fill="url(#orb-bear)"/>
       <ellipse cx="60" cy="78" rx="17" ry="13" fill="#efe0be"/>
       <ellipse cx="42" cy="56" rx="4.5" ry="7" fill="#4a3413"/>
       <ellipse cx="78" cy="56" rx="4.5" ry="7" fill="#4a3413"/>
@@ -1134,7 +1152,7 @@
       <path d="M31 38 L34 20 L46 32 Z" fill="#fff4e8"/>
       <path d="M96 52 L88 12 L64 40 Z" fill="#f2925c"/>
       <path d="M89 38 L86 20 L74 32 Z" fill="#fff4e8"/>
-      <ellipse cx="60" cy="78" rx="45" ry="42" fill="#f2925c"/>
+      <ellipse cx="60" cy="78" rx="45" ry="42" fill="url(#orb-fox)"/>
       <ellipse cx="33" cy="86" rx="15" ry="13" fill="#fff4e8"/>
       <ellipse cx="87" cy="86" rx="15" ry="13" fill="#fff4e8"/>
       <ellipse cx="60" cy="88" rx="19" ry="15" fill="#fff4e8"/>
@@ -1154,7 +1172,7 @@
       <circle cx="38" cy="30" r="5" fill="#ffe3ea"/>
       <circle cx="82" cy="30" r="10" fill="#f6b8c4"/>
       <circle cx="82" cy="30" r="5" fill="#ffe3ea"/>
-      <ellipse cx="60" cy="52" rx="34" ry="30" fill="#f6b8c4"/>
+      <ellipse cx="60" cy="52" rx="34" ry="30" fill="url(#orb-squirrel)"/>
       <ellipse cx="60" cy="62" rx="22" ry="16" fill="#ffe9ee"/>
       <ellipse cx="46" cy="48" rx="4.5" ry="7" fill="#5a2a35"/>
       <ellipse cx="74" cy="48" rx="4.5" ry="7" fill="#5a2a35"/>
@@ -1162,7 +1180,7 @@
       <circle cx="86" cy="60" r="6" fill="#ff9db0" opacity=".8"/>
       <ellipse cx="60" cy="58" rx="5" ry="4" fill="#8a4a58"/>
       <path d="M54 64 Q57 68 60 64 Q63 68 66 64" stroke="#8a4a58" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <ellipse cx="60" cy="100" rx="30" ry="26" fill="#f6b8c4"/>
+      <ellipse cx="60" cy="100" rx="30" ry="26" fill="url(#orb-squirrel)"/>
       <ellipse cx="60" cy="106" rx="18" ry="15" fill="#ffe9ee"/>
       <ellipse cx="34" cy="96" rx="9" ry="8" fill="#f6b8c4"/>
       <ellipse cx="86" cy="96" rx="9" ry="8" fill="#f6b8c4"/>
@@ -1177,7 +1195,7 @@
       <ellipse cx="14" cy="76" rx="11" ry="19" fill="#96c795"/>
       <ellipse cx="106" cy="76" rx="11" ry="19" fill="#96c795"/>
       <path d="M50 18 Q44 2 58 2 Q64 10 62 19 Z" fill="#96c795"/>
-      <circle cx="60" cy="70" r="52" fill="#b5dcb2"/>
+      <circle cx="60" cy="70" r="52" fill="url(#orb-parrot)"/>
       <ellipse cx="60" cy="90" rx="29" ry="25" fill="#eaf7e6"/>
       <circle cx="41" cy="55" r="6.5" fill="#3a3a35"/>
       <circle cx="79" cy="55" r="6.5" fill="#3a3a35"/>
@@ -1191,7 +1209,7 @@
 
     <!-- 米白色小白鹅 -->
     <symbol id="doll-goose" viewBox="0 0 120 130">
-      <ellipse cx="60" cy="80" rx="45" ry="42" fill="#f6efdd"/>
+      <ellipse cx="60" cy="80" rx="45" ry="42" fill="url(#orb-goose)"/>
       <ellipse cx="60" cy="97" rx="26" ry="18" fill="#fffdf4"/>
       <ellipse cx="16" cy="90" rx="11" ry="9" fill="#f6efdd"/>
       <ellipse cx="104" cy="90" rx="11" ry="9" fill="#f6efdd"/>
@@ -1363,7 +1381,7 @@
               <span class="major">艺术与科技专业</span>
             </div>
             <p class="edu-gpa">GPA <b>3.6</b> · 专业前 15%</p>
-            <p class="edu-courses"><b>主修课程</b>　开源编程基础 · 空间信息应用 · 可视化艺术与交互媒体 · 图绘思考 · 空间与建造 · 艺术实践与考察 · 艺术与科技导论 · 物理与硬件互动基础</p>
+            <p class="edu-courses"><b>主修课程</b>　开源编程基础 · 空间信息应用 · 可视化艺术与交互媒体 · 图绘思考 · 空间与建造 · 艺术实践与考察 · 艺术与科技导论 · 物理与硬件互动基础 · VR虚拟现实艺术 · 信息设计与策略 · 联合设计工作营</p>
           </div>
 
           <div class="skill-chips">
