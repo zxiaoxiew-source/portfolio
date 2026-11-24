@@ -455,10 +455,10 @@
     position: absolute; bottom: 164px; width: 148px; z-index: 3;
     transition: opacity .35s ease, transform .35s ease;
     pointer-events: auto; cursor: pointer;
+    perspective: 620px;
   }
   .g-doll:hover { transform: scale(1.08); }
-  .g-doll:hover svg { animation-play-state: paused; }
-  .g-doll svg { width: 100%; display: block; filter: drop-shadow(0 16px 14px rgba(35,35,79,.3)) drop-shadow(0 3px 2px rgba(35,35,79,.14)); animation: dollbob 3.4s ease-in-out infinite; }
+  .g-doll .bob { transform-style: preserve-3d; animation: dollbob 3.4s ease-in-out infinite; }
   .g-doll.gone { opacity: 0; transform: translateY(34px) scale(.6); }
 
   .gpuff {
@@ -466,8 +466,7 @@
     background: #fff; box-shadow: 0 -10px 0 rgba(255,255,255,.85); z-index: 2;
   }
 
-  .caught-slot { display: none; margin-top: -10px; width: 170px; cursor: pointer; }
-  .caught-slot svg { width: 100%; display: block; filter: drop-shadow(0 14px 13px rgba(35,35,79,.3)) drop-shadow(0 3px 2px rgba(35,35,79,.14)); }
+  .caught-slot { display: none; margin-top: -10px; width: 170px; cursor: pointer; perspective: 620px; }
   .claw3d.caught .caught-slot { display: block; animation: dollswing 2.8s ease-in-out infinite; transform-origin: top center; }
 
   /* ---------- 展开详情 ---------- */
@@ -826,34 +825,33 @@
   #coin-slot.glow { box-shadow: inset 0 -4px 0 rgba(35,35,79,.07), 0 5px 0 rgba(35,35,79,.14), 0 0 26px rgba(255,201,60,.85); }
   #coin-slot.glow::before { box-shadow: inset 0 3px 6px rgba(0,0,0,.65), 0 0 16px rgba(255,201,60,.95); }
 
-  /* 机器里的娃娃（3D 立体：正面 + 厚度层 + 缓慢转向） */
+  /* 机器里的娃娃（封面目录）：真 3D 棱柱（正面/侧面/背面）+ 上下浮动 */
   .doll3d {
     position: absolute; pointer-events: auto; cursor: pointer;
     transform-style: preserve-3d;
     -webkit-tap-highlight-color: transparent;
   }
-  .d3wrap { position: relative; transform-style: preserve-3d; animation: dollbob3d 4.6s ease-in-out infinite; }
+  .d3wrap { position: relative; transform-style: preserve-3d; perspective: 640px; animation: dollbob3d 4.6s ease-in-out infinite; }
   @keyframes dollbob3d {
-    0%,100% { transform: translateY(0) rotateY(7deg); }
-    50%     { transform: translateY(-9px) rotateY(-7deg); }
+    0%,100% { transform: translateY(0); }
+    50%     { transform: translateY(-9px); }
   }
   @keyframes dollbob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
-  .d3wrap svg { width: 100%; display: block; }
-  /* 厚度层：贴合娃娃自身轮廓的暗色背面，转动时露出体积（不再是圆球） */
-  .d-back {
-    position: absolute; inset: 0;
-    transform: translateZ(-7px) scale(.985);
-    filter: brightness(.58) saturate(.78) blur(1.5px);
-    opacity: .85;
+  /* ===== 真 3D 三视图棱柱：三个面绕 Y 轴缓慢自转 ===== */
+  .prism {
+    position: relative; width: 100%; aspect-ratio: 120 / 130;
+    transform-style: preserve-3d;
+    animation: dollspin 9s linear infinite;
   }
-  /* ===== 立体圆润 3D：球面明暗直接画进娃娃 SVG 本体，无任何外加透明球 ===== */
-  .d-front {
-    position: relative;
-    filter: drop-shadow(0 16px 15px rgba(35,35,79,.3)) drop-shadow(0 3px 2px rgba(35,35,79,.12));
-    transition: transform .25s ease, filter .25s ease;
+  @keyframes dollspin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+  .face {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    transform: rotateY(var(--fa, 0deg)) translateZ(var(--rz, 42px));
+    filter: drop-shadow(0 10px 10px rgba(35,35,79,.24));
   }
-  .doll3d:hover .d3wrap { animation-play-state: paused; }
-  .doll3d:hover .d-front { transform: scale(1.14); filter: drop-shadow(0 20px 20px rgba(35,35,79,.34)) brightness(1.05); }
+  .face:nth-child(2) { --fa: 120deg; filter: drop-shadow(0 10px 10px rgba(35,35,79,.2)) brightness(.94); }
+  .face:nth-child(3) { --fa: 240deg; filter: drop-shadow(0 10px 10px rgba(35,35,79,.16)) brightness(.88); }
   /* 悬浮显示板块名 */
   .doll-tip {
     position: absolute; bottom: calc(100% + 8px); left: 50%;
@@ -1038,41 +1036,12 @@
 <!-- ═══════ 娃娃 SVG 符号库 ═══════ -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <!-- 球面立体渐变：左上镜面高光 → 亮 → 主色 → 右下暗，明暗贴合娃娃自身轮廓 -->
-    <radialGradient id="orb-dino" cx="34%" cy="26%" r="84%" fx="27%" fy="19%">
-      <stop offset="0%" stop-color="#ffffff"/><stop offset="13%" stop-color="#dcf87f"/><stop offset="56%" stop-color="#b9e94c"/><stop offset="100%" stop-color="#7ea824"/>
-    </radialGradient>
-    <radialGradient id="orb-whale" cx="34%" cy="26%" r="84%" fx="27%" fy="19%">
-      <stop offset="0%" stop-color="#ffffff"/><stop offset="13%" stop-color="#a8d6ff"/><stop offset="56%" stop-color="#5ba8f5"/><stop offset="100%" stop-color="#2c72c8"/>
-    </radialGradient>
-    <radialGradient id="orb-star" cx="34%" cy="26%" r="84%" fx="27%" fy="19%">
-      <stop offset="0%" stop-color="#ffffff"/><stop offset="13%" stop-color="#ffe486"/><stop offset="56%" stop-color="#ffc93c"/><stop offset="100%" stop-color="#d99210"/>
-    </radialGradient>
-    <radialGradient id="orb-bunny" cx="34%" cy="26%" r="84%" fx="27%" fy="19%">
-      <stop offset="0%" stop-color="#ffffff"/><stop offset="13%" stop-color="#e6d2ff"/><stop offset="56%" stop-color="#c9a6f2"/><stop offset="100%" stop-color="#9870c8"/>
-    </radialGradient>
-    <radialGradient id="orb-bear" cx="34%" cy="26%" r="84%" fx="27%" fy="19%">
-      <stop offset="0%" stop-color="#ffffff"/><stop offset="13%" stop-color="#ecd6a4"/><stop offset="56%" stop-color="#c8a76a"/><stop offset="100%" stop-color="#917038"/>
-    </radialGradient>
-    <radialGradient id="orb-fox" cx="34%" cy="26%" r="84%" fx="27%" fy="19%">
-      <stop offset="0%" stop-color="#ffffff"/><stop offset="13%" stop-color="#ffc296"/><stop offset="56%" stop-color="#f2925c"/><stop offset="100%" stop-color="#c05e28"/>
-    </radialGradient>
-    <radialGradient id="orb-squirrel" cx="34%" cy="26%" r="84%" fx="27%" fy="19%">
-      <stop offset="0%" stop-color="#ffffff"/><stop offset="13%" stop-color="#ffe0e7"/><stop offset="56%" stop-color="#f6b8c4"/><stop offset="100%" stop-color="#d07e96"/>
-    </radialGradient>
-    <radialGradient id="orb-parrot" cx="34%" cy="26%" r="84%" fx="27%" fy="19%">
-      <stop offset="0%" stop-color="#ffffff"/><stop offset="13%" stop-color="#dcf4d8"/><stop offset="56%" stop-color="#b5dcb2"/><stop offset="100%" stop-color="#7aa878"/>
-    </radialGradient>
-    <radialGradient id="orb-goose" cx="34%" cy="26%" r="84%" fx="27%" fy="19%">
-      <stop offset="0%" stop-color="#ffffff"/><stop offset="13%" stop-color="#fffdf6"/><stop offset="56%" stop-color="#f6efdd"/><stop offset="100%" stop-color="#d3c5a2"/>
-    </radialGradient>
-
     <!-- 绿色 Q 版小恐龙 -->
     <symbol id="doll-dino" viewBox="0 0 120 130">
       <ellipse cx="44" cy="44" rx="8" ry="9" fill="#9fd632"/>
       <ellipse cx="60" cy="38" rx="9" ry="10" fill="#9fd632"/>
       <ellipse cx="76" cy="44" rx="8" ry="9" fill="#9fd632"/>
-      <ellipse cx="60" cy="80" rx="45" ry="42" fill="url(#orb-dino)"/>
+      <ellipse cx="60" cy="80" rx="45" ry="42" fill="#b9e94c"/>
       <ellipse cx="60" cy="96" rx="26" ry="19" fill="#e2f8a8"/>
       <ellipse cx="18" cy="90" rx="11" ry="9" fill="#b9e94c"/>
       <ellipse cx="102" cy="90" rx="11" ry="9" fill="#b9e94c"/>
@@ -1087,7 +1056,7 @@
     <symbol id="doll-whale" viewBox="0 0 120 130">
       <path d="M60 18 q-3 -9 3 -12" stroke="#8fd0ff" stroke-width="4" fill="none" stroke-linecap="round"/>
       <circle cx="64" cy="8" r="4" fill="#8fd0ff"/>
-      <ellipse cx="60" cy="76" rx="47" ry="42" fill="url(#orb-whale)"/>
+      <ellipse cx="60" cy="76" rx="47" ry="42" fill="#5ba8f5"/>
       <path d="M18 88 Q60 116 102 88 Q60 102 18 88 Z" fill="#cfe8ff"/>
       <path d="M104 66 Q120 52 114 38 Q122 58 108 74 Z" fill="#5ba8f5"/>
       <rect x="44" y="60" width="9" height="19" rx="4.5" fill="#23234f"/>
@@ -1100,7 +1069,7 @@
     <!-- 黄色 Q 版星星 -->
     <symbol id="doll-star" viewBox="0 0 120 130">
       <path d="M60 14 L74 50 L114 54 L84 78 L93 116 L60 94 L27 116 L36 78 L6 54 L46 50 Z"
-            fill="url(#orb-star)" stroke="#ffc93c" stroke-width="18" stroke-linejoin="round"/>
+            fill="#ffc93c" stroke="#ffc93c" stroke-width="18" stroke-linejoin="round"/>
       <rect x="46" y="62" width="9" height="19" rx="4.5" fill="#23234f"/>
       <rect x="66" y="62" width="9" height="19" rx="4.5" fill="#23234f"/>
       <circle cx="36" cy="80" r="6" fill="#ff9fb8" opacity=".8"/>
@@ -1118,7 +1087,7 @@
         <ellipse cx="78" cy="30" rx="12" ry="28" fill="#c9a6f2"/>
         <ellipse cx="78" cy="32" rx="6" ry="18" fill="#e9dcff"/>
       </g>
-      <ellipse cx="60" cy="86" rx="44" ry="40" fill="url(#orb-bunny)"/>
+      <ellipse cx="60" cy="86" rx="44" ry="40" fill="#c9a6f2"/>
       <ellipse cx="60" cy="100" rx="25" ry="18" fill="#e9dcff"/>
       <ellipse cx="16" cy="94" rx="11" ry="9" fill="#c9a6f2"/>
       <ellipse cx="104" cy="94" rx="11" ry="9" fill="#c9a6f2"/>
@@ -1135,7 +1104,7 @@
       <circle cx="30" cy="32" r="6.5" fill="#efe0be"/>
       <circle cx="90" cy="32" r="14" fill="#c8a76a"/>
       <circle cx="90" cy="32" r="6.5" fill="#efe0be"/>
-      <ellipse cx="60" cy="72" rx="47" ry="46" fill="url(#orb-bear)"/>
+      <ellipse cx="60" cy="72" rx="47" ry="46" fill="#c8a76a"/>
       <ellipse cx="60" cy="78" rx="17" ry="13" fill="#efe0be"/>
       <ellipse cx="42" cy="56" rx="4.5" ry="7" fill="#4a3413"/>
       <ellipse cx="78" cy="56" rx="4.5" ry="7" fill="#4a3413"/>
@@ -1152,7 +1121,7 @@
       <path d="M31 38 L34 20 L46 32 Z" fill="#fff4e8"/>
       <path d="M96 52 L88 12 L64 40 Z" fill="#f2925c"/>
       <path d="M89 38 L86 20 L74 32 Z" fill="#fff4e8"/>
-      <ellipse cx="60" cy="78" rx="45" ry="42" fill="url(#orb-fox)"/>
+      <ellipse cx="60" cy="78" rx="45" ry="42" fill="#f2925c"/>
       <ellipse cx="33" cy="86" rx="15" ry="13" fill="#fff4e8"/>
       <ellipse cx="87" cy="86" rx="15" ry="13" fill="#fff4e8"/>
       <ellipse cx="60" cy="88" rx="19" ry="15" fill="#fff4e8"/>
@@ -1172,7 +1141,7 @@
       <circle cx="38" cy="30" r="5" fill="#ffe3ea"/>
       <circle cx="82" cy="30" r="10" fill="#f6b8c4"/>
       <circle cx="82" cy="30" r="5" fill="#ffe3ea"/>
-      <ellipse cx="60" cy="52" rx="34" ry="30" fill="url(#orb-squirrel)"/>
+      <ellipse cx="60" cy="52" rx="34" ry="30" fill="#f6b8c4"/>
       <ellipse cx="60" cy="62" rx="22" ry="16" fill="#ffe9ee"/>
       <ellipse cx="46" cy="48" rx="4.5" ry="7" fill="#5a2a35"/>
       <ellipse cx="74" cy="48" rx="4.5" ry="7" fill="#5a2a35"/>
@@ -1180,7 +1149,7 @@
       <circle cx="86" cy="60" r="6" fill="#ff9db0" opacity=".8"/>
       <ellipse cx="60" cy="58" rx="5" ry="4" fill="#8a4a58"/>
       <path d="M54 64 Q57 68 60 64 Q63 68 66 64" stroke="#8a4a58" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <ellipse cx="60" cy="100" rx="30" ry="26" fill="url(#orb-squirrel)"/>
+      <ellipse cx="60" cy="100" rx="30" ry="26" fill="#f6b8c4"/>
       <ellipse cx="60" cy="106" rx="18" ry="15" fill="#ffe9ee"/>
       <ellipse cx="34" cy="96" rx="9" ry="8" fill="#f6b8c4"/>
       <ellipse cx="86" cy="96" rx="9" ry="8" fill="#f6b8c4"/>
@@ -1195,7 +1164,7 @@
       <ellipse cx="14" cy="76" rx="11" ry="19" fill="#96c795"/>
       <ellipse cx="106" cy="76" rx="11" ry="19" fill="#96c795"/>
       <path d="M50 18 Q44 2 58 2 Q64 10 62 19 Z" fill="#96c795"/>
-      <circle cx="60" cy="70" r="52" fill="url(#orb-parrot)"/>
+      <circle cx="60" cy="70" r="52" fill="#b5dcb2"/>
       <ellipse cx="60" cy="90" rx="29" ry="25" fill="#eaf7e6"/>
       <circle cx="41" cy="55" r="6.5" fill="#3a3a35"/>
       <circle cx="79" cy="55" r="6.5" fill="#3a3a35"/>
@@ -1209,7 +1178,7 @@
 
     <!-- 米白色小白鹅 -->
     <symbol id="doll-goose" viewBox="0 0 120 130">
-      <ellipse cx="60" cy="80" rx="45" ry="42" fill="url(#orb-goose)"/>
+      <ellipse cx="60" cy="80" rx="45" ry="42" fill="#f6efdd"/>
       <ellipse cx="60" cy="97" rx="26" ry="18" fill="#fffdf4"/>
       <ellipse cx="16" cy="90" rx="11" ry="9" fill="#f6efdd"/>
       <ellipse cx="104" cy="90" rx="11" ry="9" fill="#f6efdd"/>
@@ -1220,6 +1189,172 @@
       <path d="M46 88 H74" stroke="#d98c3f" stroke-width="2.5" stroke-linecap="round"/>
       <circle cx="34" cy="78" r="6" fill="#ff9fb8" opacity=".7"/>
       <circle cx="86" cy="78" r="6" fill="#ff9fb8" opacity=".7"/>
+    </symbol>
+
+    <!-- ===== 三视图：侧面 / 背面（配合棱柱自转，三个角度都能看到） ===== -->
+    <!-- 恐龙 -->
+    <symbol id="doll-dino-side" viewBox="0 0 120 130">
+      <ellipse cx="58" cy="80" rx="45" ry="42" fill="#b9e94c"/>
+      <ellipse cx="34" cy="44" rx="7" ry="8" fill="#9fd632"/>
+      <ellipse cx="48" cy="37" rx="8" ry="9" fill="#9fd632"/>
+      <ellipse cx="64" cy="40" rx="7" ry="8" fill="#9fd632"/>
+      <ellipse cx="42" cy="98" rx="18" ry="14" fill="#e2f8a8"/>
+      <path d="M98 94 Q116 104 112 122 Q100 116 88 108 Z" fill="#9fd632"/>
+      <ellipse cx="24" cy="92" rx="10" ry="8" fill="#b9e94c"/>
+      <rect x="27" y="60" width="9" height="19" rx="4.5" fill="#23234f"/>
+      <circle cx="20" cy="78" r="6" fill="#ff9fb8" opacity=".75"/>
+      <path d="M22 88 Q30 94 38 90" stroke="#23234f" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="doll-dino-back" viewBox="0 0 120 130">
+      <ellipse cx="60" cy="80" rx="45" ry="42" fill="#b9e94c"/>
+      <ellipse cx="42" cy="42" rx="7" ry="8" fill="#9fd632"/>
+      <ellipse cx="60" cy="36" rx="8" ry="9" fill="#9fd632"/>
+      <ellipse cx="78" cy="42" rx="7" ry="8" fill="#9fd632"/>
+      <path d="M94 96 Q114 106 110 124 Q98 118 86 108 Z" fill="#9fd632"/>
+      <ellipse cx="60" cy="100" rx="20" ry="13" fill="#e2f8a8"/>
+    </symbol>
+    <!-- 鲸鱼 -->
+    <symbol id="doll-whale-side" viewBox="0 0 120 130">
+      <path d="M40 18 q-3 -9 3 -12" stroke="#8fd0ff" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <circle cx="44" cy="8" r="4" fill="#8fd0ff"/>
+      <ellipse cx="60" cy="76" rx="47" ry="42" fill="#5ba8f5"/>
+      <path d="M20 88 Q56 114 96 90 Q56 102 20 88 Z" fill="#cfe8ff"/>
+      <path d="M102 62 Q118 50 112 34 Q120 56 106 72 Z" fill="#5ba8f5"/>
+      <ellipse cx="88" cy="98" rx="14" ry="8" fill="#5ba8f5"/>
+      <rect x="31" y="58" width="9" height="19" rx="4.5" fill="#23234f"/>
+      <circle cx="22" cy="76" r="6" fill="#ff9fb8" opacity=".75"/>
+      <path d="M24 84 Q32 92 42 88" stroke="#23234f" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="doll-whale-back" viewBox="0 0 120 130">
+      <ellipse cx="60" cy="76" rx="47" ry="42" fill="#5ba8f5"/>
+      <path d="M94 48 Q114 36 110 18 Q120 42 104 60 Z" fill="#5ba8f5"/>
+      <circle cx="60" cy="30" r="5" fill="#8fd0ff"/>
+      <ellipse cx="24" cy="90" rx="10" ry="14" fill="#5ba8f5"/>
+      <ellipse cx="96" cy="90" rx="10" ry="14" fill="#5ba8f5"/>
+    </symbol>
+    <!-- 星星（侧/背面就是更窄的星形剪影） -->
+    <symbol id="doll-star-side" viewBox="0 0 120 130">
+      <g transform="translate(60 66) scale(.42 1) translate(-60 -66)"><use href="#doll-star"/></g>
+    </symbol>
+    <symbol id="doll-star-back" viewBox="0 0 120 130">
+      <g transform="translate(60 66) scale(.42 1) translate(-60 -66)"><use href="#doll-star"/></g>
+    </symbol>
+    <!-- 兔子 -->
+    <symbol id="doll-bunny-side" viewBox="0 0 120 130">
+      <g transform="rotate(-16 46 40)">
+        <ellipse cx="46" cy="32" rx="12" ry="28" fill="#c9a6f2"/>
+        <ellipse cx="46" cy="34" rx="6" ry="18" fill="#e9dcff"/>
+      </g>
+      <ellipse cx="58" cy="86" rx="44" ry="40" fill="#c9a6f2"/>
+      <ellipse cx="46" cy="100" rx="18" ry="13" fill="#e9dcff"/>
+      <ellipse cx="20" cy="92" rx="10" ry="8" fill="#c9a6f2"/>
+      <circle cx="95" cy="92" r="13" fill="#e9dcff"/>
+      <rect x="35" y="64" width="9" height="19" rx="4.5" fill="#23234f"/>
+      <circle cx="27" cy="82" r="6" fill="#ff9fb8" opacity=".8"/>
+      <path d="M38 92 Q46 100 54 94" stroke="#23234f" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="doll-bunny-back" viewBox="0 0 120 130">
+      <g transform="rotate(-8 44 34)"><ellipse cx="44" cy="32" rx="12" ry="28" fill="#c9a6f2"/></g>
+      <g transform="rotate(8 76 34)"><ellipse cx="76" cy="32" rx="12" ry="28" fill="#c9a6f2"/></g>
+      <ellipse cx="60" cy="86" rx="44" ry="40" fill="#c9a6f2"/>
+      <circle cx="60" cy="96" r="14" fill="#e9dcff"/>
+    </symbol>
+    <!-- 小熊 -->
+    <symbol id="doll-bear-side" viewBox="0 0 120 130">
+      <circle cx="38" cy="34" r="14" fill="#c8a76a"/>
+      <circle cx="38" cy="34" r="6.5" fill="#efe0be"/>
+      <ellipse cx="60" cy="72" rx="47" ry="46" fill="#c8a76a"/>
+      <ellipse cx="36" cy="78" rx="15" ry="12" fill="#efe0be"/>
+      <ellipse cx="30" cy="74" rx="5.5" ry="4" fill="#4a3413"/>
+      <ellipse cx="44" cy="56" rx="4.5" ry="7" fill="#4a3413"/>
+      <circle cx="26" cy="84" r="6" fill="#e8a87c" opacity=".85"/>
+      <path d="M32 82 Q36 86 40 82" stroke="#4a3413" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="88" cy="100" rx="12" ry="9" fill="#c8a76a"/>
+    </symbol>
+    <symbol id="doll-bear-back" viewBox="0 0 120 130">
+      <circle cx="30" cy="34" r="14" fill="#c8a76a"/>
+      <circle cx="90" cy="34" r="14" fill="#c8a76a"/>
+      <ellipse cx="60" cy="72" rx="47" ry="46" fill="#c8a76a"/>
+    </symbol>
+    <!-- 狐狸 -->
+    <symbol id="doll-fox-side" viewBox="0 0 120 130">
+      <path d="M32 52 L40 12 L64 40 Z" fill="#f2925c"/>
+      <path d="M40 38 L43 20 L55 32 Z" fill="#fff4e8"/>
+      <ellipse cx="60" cy="78" rx="45" ry="42" fill="#f2925c"/>
+      <path d="M80 102 Q114 100 112 66 Q108 48 92 54 Q100 72 92 88 Q86 98 72 102 Z" fill="#f2925c"/>
+      <ellipse cx="106" cy="62" rx="9" ry="7" fill="#fff4e8"/>
+      <ellipse cx="34" cy="88" rx="16" ry="13" fill="#fff4e8"/>
+      <ellipse cx="44" cy="64" rx="4.5" ry="7" fill="#4a3413"/>
+      <circle cx="26" cy="82" r="5" fill="#4a3413"/>
+      <path d="M28 90 Q34 95 40 91" stroke="#4a3413" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="doll-fox-back" viewBox="0 0 120 130">
+      <path d="M26 52 L34 12 L58 40 Z" fill="#f2925c"/>
+      <path d="M94 52 L86 12 L62 40 Z" fill="#f2925c"/>
+      <ellipse cx="60" cy="78" rx="45" ry="42" fill="#f2925c"/>
+      <path d="M60 100 Q96 104 100 72 Q96 56 82 62 Q90 80 76 92 Q70 98 60 100 Z" fill="#f2925c"/>
+      <ellipse cx="92" cy="68" rx="9" ry="7" fill="#fff4e8"/>
+    </symbol>
+    <!-- 松鼠 -->
+    <symbol id="doll-squirrel-side" viewBox="0 0 120 130">
+      <path d="M74 60 Q114 66 110 98 Q104 118 74 112 Q90 100 88 82 Q86 66 74 60 Z" fill="#ee9fb2"/>
+      <circle cx="42" cy="30" r="10" fill="#f6b8c4"/>
+      <circle cx="42" cy="30" r="5" fill="#ffe3ea"/>
+      <ellipse cx="54" cy="54" rx="32" ry="28" fill="#f6b8c4"/>
+      <ellipse cx="40" cy="50" rx="4.5" ry="7" fill="#5a2a35"/>
+      <circle cx="28" cy="62" r="6" fill="#ff9db0" opacity=".8"/>
+      <ellipse cx="42" cy="58" rx="5" ry="4" fill="#8a4a58"/>
+      <path d="M36 64 Q39 68 43 64" stroke="#8a4a58" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <ellipse cx="52" cy="100" rx="26" ry="22" fill="#f6b8c4"/>
+      <ellipse cx="52" cy="106" rx="15" ry="12" fill="#ffe9ee"/>
+      <ellipse cx="52" cy="94" rx="8" ry="9" fill="#c98a5b"/>
+    </symbol>
+    <symbol id="doll-squirrel-back" viewBox="0 0 120 130">
+      <path d="M88 96 Q118 88 112 56 Q106 34 84 36 Q98 56 92 78 Q88 90 76 94 Z" fill="#ee9fb2"/>
+      <circle cx="40" cy="28" r="10" fill="#f6b8c4"/>
+      <circle cx="80" cy="28" r="10" fill="#f6b8c4"/>
+      <ellipse cx="60" cy="92" rx="30" ry="26" fill="#f6b8c4"/>
+      <ellipse cx="60" cy="98" rx="16" ry="12" fill="#ffe9ee"/>
+    </symbol>
+    <!-- 鹦鹉 -->
+    <symbol id="doll-parrot-side" viewBox="0 0 120 130">
+      <ellipse cx="62" cy="72" rx="38" ry="46" fill="#b5dcb2"/>
+      <ellipse cx="76" cy="78" rx="13" ry="24" fill="#96c795"/>
+      <path d="M54 20 Q50 4 62 3 Q68 11 64 21 Z" fill="#96c795"/>
+      <ellipse cx="54" cy="96" rx="20" ry="16" fill="#eaf7e6"/>
+      <ellipse cx="34" cy="52" rx="6.5" ry="7" fill="#3a3a35"/>
+      <circle cx="36.5" cy="49.5" r="2" fill="#fff"/>
+      <path d="M30 58 Q18 62 20 72 Q24 78 32 74 Q26 68 30 62 Z" fill="#f0b183"/>
+      <circle cx="28" cy="66" r="6" fill="#ffadb8" opacity=".8"/>
+      <path d="M46 118 L44 126 M62 118 L64 126" stroke="#e8a84f" stroke-width="4" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="doll-parrot-back" viewBox="0 0 120 130">
+      <path d="M74 100 Q102 106 110 126 Q92 122 72 110 Z" fill="#8fc79a"/>
+      <path d="M64 106 Q86 116 94 128 Q78 122 58 110 Z" fill="#a5cf9d"/>
+      <ellipse cx="14" cy="76" rx="11" ry="19" fill="#96c795"/>
+      <ellipse cx="106" cy="76" rx="11" ry="19" fill="#96c795"/>
+      <path d="M52 22 Q46 6 60 5 Q66 13 64 22 Z" fill="#96c795"/>
+      <ellipse cx="60" cy="72" rx="44" ry="46" fill="#b5dcb2"/>
+    </symbol>
+    <!-- 白鹅 -->
+    <symbol id="doll-goose-side" viewBox="0 0 120 130">
+      <ellipse cx="62" cy="84" rx="43" ry="38" fill="#f6efdd"/>
+      <circle cx="34" cy="44" r="20" fill="#f6efdd"/>
+      <path d="M30 34 Q36 26 42 34" stroke="#e8ddc2" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <ellipse cx="14" cy="50" rx="8" ry="5" fill="#f2a65a"/>
+      <path d="M16 50 H32" stroke="#d98c3f" stroke-width="2.5" stroke-linecap="round"/>
+      <ellipse cx="34" cy="42" rx="3.5" ry="5" fill="#23234f"/>
+      <path d="M54 66 Q66 78 60 96" stroke="#e8ddc2" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <ellipse cx="66" cy="102" rx="20" ry="14" fill="#fffdf4"/>
+      <rect x="42" y="60" width="9" height="19" rx="4.5" fill="#23234f"/>
+      <circle cx="28" cy="62" r="6" fill="#ff9fb8" opacity=".7"/>
+    </symbol>
+    <symbol id="doll-goose-back" viewBox="0 0 120 130">
+      <ellipse cx="60" cy="84" rx="45" ry="40" fill="#f6efdd"/>
+      <path d="M88 96 Q106 90 104 72" stroke="#e8ddc2" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="22" cy="88" rx="10" ry="16" fill="#f6efdd"/>
+      <ellipse cx="98" cy="88" rx="10" ry="16" fill="#f6efdd"/>
+      <ellipse cx="60" cy="104" rx="20" ry="13" fill="#fffdf4"/>
     </symbol>
 
     <!-- 爪子 -->
@@ -2016,6 +2151,47 @@
 <footer>🎮 CLAW MACHINE PORTFOLIO · 学生作品集 · 调研数据为课程示意 · 2026</footer>
 
 <script>
+  // ===== 真 3D 娃娃装配：把每个娃娃替换成 正面/侧面/背面 三视图棱柱 =====
+  (function () {
+    const NS = 'http://www.w3.org/2000/svg';
+    function buildPrism(host, base, bob) {
+      if (!host || !base || host.querySelector('.prism')) return;
+      host.querySelectorAll('svg').forEach((s) => s.remove());
+      const prism = document.createElement('div');
+      prism.className = 'prism';
+      [base, base + '-side', base + '-back'].forEach((sym) => {
+        const svg = document.createElementNS(NS, 'svg');
+        svg.setAttribute('viewBox', '0 0 120 130');
+        svg.setAttribute('aria-hidden', 'true');
+        svg.classList.add('face');
+        const use = document.createElementNS(NS, 'use');
+        use.setAttribute('href', sym);
+        svg.appendChild(use);
+        prism.appendChild(svg);
+      });
+      if (bob) {
+        const w = document.createElement('div');
+        w.className = 'bob';
+        w.appendChild(prism);
+        host.appendChild(w);
+      } else {
+        host.appendChild(prism);
+      }
+      const width = host.offsetWidth || host.clientWidth || 0;
+      // translateZ = 宽度的一半 / tan(60°)，让三个面恰好拼成正三棱柱
+      prism.style.setProperty('--rz', ((width > 0 ? width : 170) * 0.2887).toFixed(1) + 'px');
+    }
+    document.querySelectorAll('.doll3d').forEach((el) => {
+      const cls = Array.from(el.classList).find((c) => c.startsWith('d-'));
+      if (cls) buildPrism(el.querySelector('.d3wrap'), '#doll-' + cls.slice(2), false);
+    });
+    document.querySelectorAll('.g-doll[data-sym]').forEach((el) => buildPrism(el, el.dataset.sym, true));
+    document.querySelectorAll('.caught-slot').forEach((el) => {
+      const use = el.querySelector('use');
+      if (use) buildPrism(el, use.getAttribute('href'), false);
+    });
+  })();
+
   // ===== 板块 3D 娃娃机：一机一娃，点击娃娃自动抓取 =====
   document.querySelectorAll('.board[data-game]').forEach((sec) => {
     const claw = sec.querySelector('.claw3d');
