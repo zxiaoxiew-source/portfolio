@@ -421,7 +421,7 @@
   @keyframes burstspin { to { transform: translate(-50%,-50%) rotate(360deg); } }
   .gstage .scene { scale: 1.14; }
   /* 机柜保持静态视角，不再左右转动；娃娃的运动交给重力物理 */
-  .gscene { transform: rotateX(7deg) rotateY(-6deg); }
+  .gscene { transform: rotateX(10deg) rotateY(-16deg); }
   .gscene .p-back { background-color: var(--cabback, #ff9fc4); }
   .gscene .p-left { background: var(--cab1, #8fd0ff); }
   .gscene .p-right { background: var(--cab1, #6db9fa); }
@@ -456,9 +456,6 @@
   .g-doll:hover { transform: scale(1.08); }
   .g-doll svg { width: 100%; display: block; filter: drop-shadow(0 9px 8px rgba(35,35,79,.2)); will-change: transform; }
   .g-doll.gone { opacity: 0; transform: translateY(34px) scale(.6); }
-  /* 陪衬娃娃：和主娃娃一起受重力沉降、彼此轻微碰撞 */
-  .pile-doll { position: absolute; z-index: 2; pointer-events: none; }
-  .pile-doll svg { width: 100%; display: block; will-change: transform; filter: drop-shadow(0 8px 7px rgba(35,35,79,.18)); }
 
   .gpuff {
     position: absolute; bottom: 128px; width: 108px; height: 78px; border-radius: 50%;
@@ -834,7 +831,6 @@
   .d3wrap { position: relative; transform-style: preserve-3d; will-change: transform; }
   .d3wrap svg { width: 100%; display: block; }
   /* 真实 3D 渲染图自带体积与接触阴影，不再需要暗色厚度副本 */
-  .d-back { display: none; }
   /* 真 3D 软陶手办：只补一层柔和落地阴影 */
   .d-front {
     position: relative;
@@ -1069,15 +1065,15 @@
         <div class="panel p-left"></div>
         <div class="panel p-right"></div>
 
-        <div class="doll3d d-dino" data-target="#about"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><image data-doll="dino" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><svg class="d-front" viewBox="0 0 120 130"><image data-doll="dino" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><span class="doll-tip">个人简介 🦖</span></div></div>
-        <div class="doll3d d-fox" data-target="#fridge"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><image data-doll="fox" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><svg class="d-front" viewBox="0 0 120 130"><image data-doll="fox" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><span class="doll-tip">作品① 冰箱食材台账 🦊</span></div></div>
-        <div class="doll3d d-star" data-target="#mat"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><image data-doll="star" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><svg class="d-front" viewBox="0 0 120 130"><image data-doll="star" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><span class="doll-tip">作品② 感应地毯 ⭐</span></div></div>
-        <div class="doll3d d-goose" data-target="#guojia"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><image data-doll="goose" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><svg class="d-front" viewBox="0 0 120 130"><image data-doll="goose" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><span class="doll-tip">作品③ 过家家 🪿</span></div></div>
-        <div class="doll3d d-bear" data-target="#myth"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><image data-doll="bear" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><svg class="d-front" viewBox="0 0 120 130"><image data-doll="bear" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><span class="doll-tip">作品④ 神话画卷 🐻</span></div></div>
-        <div class="doll3d d-whale" data-target="#coral"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><image data-doll="whale" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><svg class="d-front" viewBox="0 0 120 130"><image data-doll="whale" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><span class="doll-tip">作品⑤ 深海枯荣 🐳</span></div></div>
-        <div class="doll3d d-bunny" data-target="#thanks"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><image data-doll="bunny" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><svg class="d-front" viewBox="0 0 120 130"><image data-doll="bunny" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><span class="doll-tip">联系我 🐰</span></div></div>
-        <div class="doll3d d-squirrel" data-target="#ixd"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><image data-doll="squirrel" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><svg class="d-front" viewBox="0 0 120 130"><image data-doll="squirrel" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><span class="doll-tip">作品⑥ 交互设计 🐿️</span></div></div>
-        <div class="doll3d d-parrot" data-target="#heritage"><div class="d3wrap"><svg class="d-back" viewBox="0 0 120 130" aria-hidden="true"><image data-doll="parrot" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><svg class="d-front" viewBox="0 0 120 130"><image data-doll="parrot" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><span class="doll-tip">作品⑦ 古建解码 🦜</span></div></div>
+        <div class="doll3d d-dino" data-target="#about"><div class="d3wrap"><svg class="d-front" viewBox="0 0 120 130"><image data-doll="dino" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><span class="doll-tip">个人简介 🦖</span></div></div>
+        <div class="doll3d d-fox" data-target="#fridge"><div class="d3wrap"><svg class="d-front" viewBox="0 0 120 130"><image data-doll="fox" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><span class="doll-tip">作品① 冰箱食材台账 🦊</span></div></div>
+        <div class="doll3d d-star" data-target="#mat"><div class="d3wrap"><svg class="d-front" viewBox="0 0 120 130"><image data-doll="star" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><span class="doll-tip">作品② 感应地毯 ⭐</span></div></div>
+        <div class="doll3d d-goose" data-target="#guojia"><div class="d3wrap"><svg class="d-front" viewBox="0 0 120 130"><image data-doll="goose" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><span class="doll-tip">作品③ 过家家 🪿</span></div></div>
+        <div class="doll3d d-bear" data-target="#myth"><div class="d3wrap"><svg class="d-front" viewBox="0 0 120 130"><image data-doll="bear" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><span class="doll-tip">作品④ 神话画卷 🐻</span></div></div>
+        <div class="doll3d d-whale" data-target="#coral"><div class="d3wrap"><svg class="d-front" viewBox="0 0 120 130"><image data-doll="whale" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><span class="doll-tip">作品⑤ 深海枯荣 🐳</span></div></div>
+        <div class="doll3d d-bunny" data-target="#thanks"><div class="d3wrap"><svg class="d-front" viewBox="0 0 120 130"><image data-doll="bunny" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><span class="doll-tip">联系我 🐰</span></div></div>
+        <div class="doll3d d-squirrel" data-target="#ixd"><div class="d3wrap"><svg class="d-front" viewBox="0 0 120 130"><image data-doll="squirrel" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><span class="doll-tip">作品⑥ 交互设计 🐿️</span></div></div>
+        <div class="doll3d d-parrot" data-target="#heritage"><div class="d3wrap"><svg class="d-front" viewBox="0 0 120 130"><image data-doll="parrot" x="0" y="0" width="120" height="130" preserveAspectRatio="xMidYMax meet"/></svg><span class="doll-tip">作品⑦ 古建解码 🦜</span></div></div>
         <div class="puff3d pf1"></div><div class="puff3d pf2"></div><div class="puff3d pf3"></div>
         <div class="puff3d pf4"></div><div class="puff3d pf5"></div><div class="puff3d pf6"></div>
 
@@ -1881,32 +1877,9 @@
     createWorld(document.getElementById('scene'), '.doll3d', '.d3wrap',
                 { radius: 0.46, sink: 22 });
 
-    // 每个娃娃机：主娃娃 + 三只陪衬娃娃堆在一起，能看出彼此碰撞
-    const NAMES = ['dino','fox','star','goose','bear','whale','bunny','squirrel','parrot'];
-    const PILE = [
-      { dx: -126, dy: 6,  w: 108 },
-      { dx:  126, dy: 10, w: 104 },
-      { dx:  -46, dy: 42, w: 96  }
-    ];
-    document.querySelectorAll('.board[data-game] .front3').forEach(function (front, k) {
-      const main = front.querySelector('.g-doll');
-      if (!main) return;
-      PILE.forEach(function (p, j) {
-        const d = document.createElement('div');
-        d.className = 'pile-doll';
-        d.style.left = main.style.left || '36%';
-        d.style.marginLeft = p.dx + 'px';
-        d.style.bottom = (164 - p.dy) + 'px';
-        d.style.width = p.w + 'px';
-        const nm = NAMES[(k * 3 + j + 2) % NAMES.length];
-        d.innerHTML = '<svg viewBox="0 0 120 130"><image data-doll="' + nm +
-                      '" x="0" y="0" width="120" height="130" ' +
-                      'preserveAspectRatio="xMidYMax meet"/></svg>';
-        front.appendChild(d);
-        paintDoll(d.querySelector('image'));
-      });
-      createWorld(front, '.g-doll, .pile-doll', 'svg',
-                  { radius: 0.46, sink: 24 });
+    // 每个娃娃机只有一只娃娃，受重力轻微沉降
+    document.querySelectorAll('.board[data-game] .front3').forEach(function (front) {
+      createWorld(front, '.g-doll', 'svg', { radius: 0.46, sink: 24 });
     });
 
     function step(w) {
