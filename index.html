@@ -1000,6 +1000,7 @@
       <path d="M45 14 Q56 30 44 47" stroke="#2a3272" stroke-width="8" fill="none" stroke-linecap="round"/>
     </svg>
   </div>
+  <button class="rail-dot" data-target="#cover" style="--c:#ff8fb8"><span class="rail-tip">封面 · 娃娃机</span>🎁</button>
   <button class="rail-dot" data-target="#about"  style="--c:#ffd93d"><span class="rail-tip">个人简介</span>🦖</button>
   <button class="rail-dot" data-target="#fridge" style="--c:#ffab5c"><span class="rail-tip">作品① 冰箱台账</span>🦊</button>
   <button class="rail-dot" data-target="#mat"    style="--c:#8fd0ff"><span class="rail-tip">作品② 感应地毯</span>⭐</button>
@@ -2173,26 +2174,52 @@
       document.body.style.overflow = 'hidden';
     });
   });
-    // ===== 封面娃娃 = 目录：点击跳转对应板块（含屏幕坐标兜底） =====
+    // ===== 封面娃娃 = 目录：逐像素透明度命中 =====
+    // 前排娃娃的 SVG 矩形会盖住后排（小白鹅的透明区域压着小兔子），
+    // 因此不再用元素矩形判定，而是用每个娃娃 PNG 的 alpha 通道做点击命中；
+    // 先测前排（z=-40）再测后排（z=-70），谁在该点真的不透明就跳谁。
     const coverStage = document.querySelector('.cover .stage');
-    const coverDollOrder = ['d-dino', 'd-fox', 'd-goose', 'd-bear', 'd-whale', 'd-star', 'd-bunny', 'd-squirrel', 'd-parrot']; // 由近及远（前排 z 更大优先）
     function goDoll(d) {
       const t = document.querySelector(d.dataset.target);
       if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    document.querySelectorAll('.doll3d[data-target]').forEach((d) => {
-      d.addEventListener('click', () => goDoll(d));
+    const FRONT_ROW = ['d-dino', 'd-fox', 'd-goose', 'd-bear'];
+    const BACK_ROW  = ['d-whale', 'd-star', 'd-bunny', 'd-squirrel', 'd-parrot'];
+    const coverDolls = FRONT_ROW.concat(BACK_ROW)
+      .map((c) => coverStage.querySelector('.doll3d.' + c))
+      .filter(Boolean);
+    // 每个娃娃的 PNG 位图 → 离屏 canvas，供 alpha 检测
+    const hitMaps = new Map();
+    coverDolls.forEach((d) => {
+      const im = d.querySelector('svg.d-front image');
+      if (!im) return;
+      const src = im.getAttribute('href') ||
+                  im.getAttributeNS('http://www.w3.org/1999/xlink', 'href');
+      if (!src || !/^data:image\/png/.test(src)) return;
+      const cv = document.createElement('canvas');
+      cv.width = 120; cv.height = 130;
+      const img = new Image();
+      img.onload = () => {
+        cv.getContext('2d').drawImage(img, 0, 0, 120, 130);
+        hitMaps.set(d, cv.getContext('2d').getImageData(0, 0, 120, 130));
+      };
+      img.src = src;
     });
+    function dollHit(d, cx, cy) {
+      const front = d.querySelector('svg.d-front');
+      if (!front) return false;
+      const r = front.getBoundingClientRect();
+      if (cx < r.left || cx > r.right || cy < r.top || cy > r.bottom) return false;
+      const data = hitMaps.get(d);
+      if (!data) return true; // 位图未就绪时退化为矩形判定
+      const lx = Math.min(119, Math.max(0, Math.floor((cx - r.left) / r.width * 120)));
+      const ly = Math.min(129, Math.max(0, Math.floor((cy - r.top) / r.height * 130)));
+      return data.data[(ly * 120 + lx) * 4 + 3] > 24;
+    }
     coverStage.addEventListener('click', (e) => {
       if (e.target.closest('button, a, .coin-wrap')) return;
-      for (const cls of coverDollOrder) {
-        const d = coverStage.querySelector('.doll3d.' + cls);
-        if (!d) continue;
-        const r = d.getBoundingClientRect();
-        if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) {
-          goDoll(d);
-          break;
-        }
+      for (const d of coverDolls) {
+        if (dollHit(d, e.clientX, e.clientY)) { goDoll(d); break; }
       }
     });
 
